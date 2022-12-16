@@ -1,0 +1,128 @@
+// links
+a {
+    display: inline-block;
+}
+
+.hover-default {
+    transition: $transition-primary;
+    transition-property: opacity;
+
+    @include hover {
+        opacity: 0.6;
+    }
+}
+
+.nav-link {
+    color: $white;
+    font-size: 22px;
+    line-height: 120%;
+    font-weight: 300;
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        height: 1px;
+        width: 0;
+        pointer-events: none;
+        background-color: $white;
+        transition: $transition-primary;
+        transition-property: width;
+    }
+
+    @include hover {
+        &::after {
+            width: 100%;
+        }
+    }
+}
+
+.nav-link--block {
+    padding: 8px 18px;
+    color: $black;
+    background-color: $white;
+    transition: $transition-primary;
+    transition-property: color background-color;
+
+    @include hover {
+        color: $white;
+        background-color: $black;
+
+        &::after {
+            content: unset;
+        }
+    }
+}
+
+.block-link {
+    background-color: $black;
+    color: $white;
+    padding: 18px 24px;
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+
+    @include hover {
+        .block-link__icon {
+            transform: rotate(0);
+        }
+    }
+}
+
+.block-link--white {
+    background-color: $white;
+    color: $black;
+}
+
+.block-link--small {
+    padding: 12px 16px;
+}
+
+.block-link__icon {
+    width: 12px;
+    transform: rotate(45deg);
+    margin-left: 4px;
+    transition: $transition-primary;
+    transition-property: transform;
+}
+
+.arrow-link {
+    color: $black;
+    font-size: 12px;
+    text-transform: uppercase;
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0;
+        height: 1px;
+        pointer-events: none;
+        background-color: $black;
+        transition: $transition-primary;
+        transition-property: width;
+    }
+
+    @include hover {
+        &::after {
+            width: 100%;
+        }
+
+        .arrow-link__icon {
+            transform: rotate(0);
+        }
+    }
+}
+
+.arrow-link__icon {
+    width: 10px;
+    margin-left: 4px;
+    display: inline-block;
+    transform: rotate(45deg);
+    transition: $transition-primary;
+    transition-property: transform;
+}

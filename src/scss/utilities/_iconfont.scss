@@ -1,0 +1,56 @@
+@font-face {
+    font-family: "svgicons";
+    src: url('../assets/fonts/svgicons.eot');
+    src: url('../assets/fonts/svgicons.eot?#iefix') format('eot'),
+        url('../assets/fonts/svgicons.woff') format('woff'),
+        url('../assets/fonts/svgicons.ttf') format('truetype');
+}
+
+@mixin icon-styles {
+    font-family: "svgicons";
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    // speak: none; // only necessary if not using the private unicode range (firstGlyph option)
+    text-decoration: none;
+    text-transform: none;
+    display: inline-block;
+}
+
+%icon {
+    @include icon-styles;
+}
+
+@function icon-char($filename) {
+    $char: "";
+
+    @if $filename == banana {
+        $char: "\E001";
+    }
+    @if $filename == house {
+        $char: "\E002";
+    }
+
+    @return $char;
+}
+
+@mixin icon($filename, $insert: before, $extend: true) {
+    &:#{$insert} {
+        @if $extend {
+            @extend %icon;
+        } @else {
+            @include icon-styles;
+        }
+        content: icon-char($filename);
+    }
+}
+
+.icon-banana {
+    @include icon(banana);
+}
+.icon-house {
+    @include icon(house);
+}
+

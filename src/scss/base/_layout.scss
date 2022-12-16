@@ -1,0 +1,13 @@
+.wrap {
+    max-width: 500px;
+    padding: 0 80px;
+    margin: 0 auto;
+
+    @include tablet {
+        padding: 0 25px;
+    }
+
+    @include phone {
+        padding: 0 20px;
+    }
+}

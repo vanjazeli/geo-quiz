@@ -1,0 +1,41 @@
+// links
+
+.link {
+  text-decoration: none;
+  display: inline-block;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+// buttons
+
+.btn {
+  background: none;
+  border: none;
+  // font-family: epi;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+// text
+
+.bold {
+  font-weight: bold;
+}
+
+.center {
+  text-align: center;
+}
+
+// other
+
+html {
+  scroll-behavior: smooth;
+}
+
+.input {
+  border: none;
+  background: none;
+}
+
+// -------------------- media --------------------

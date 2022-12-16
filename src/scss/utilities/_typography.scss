@@ -1,0 +1,212 @@
+// typography
+.h1 {
+    font-size: 90px;
+    line-height: 120%;
+
+    @include tablet {
+        font-size: 70px;
+        line-height: 120%;
+    }
+
+    @include phone {
+        font-size: 40px;
+        line-height: 125%;
+        letter-spacing: -0.02em;
+    }
+}
+
+.h2-l {
+    font-size: 70px;
+    line-height: 120%;
+
+    @include tablet {
+        font-size: 58px;
+        line-height: 120%;
+    }
+
+    @include phone {
+        font-size: 42px;
+        line-height: 83%;
+        letter-spacing: -0.02em;
+    }
+}
+
+.h2 {
+    font-size: 48px;
+    line-height: 120%;
+    letter-spacing: -0.02em;
+
+    @include tablet {
+        font-size: 34px;
+        line-height: 82%;
+    }
+
+    @include phone {
+        font-size: 28px;
+        line-height: 86%;
+    }
+}
+
+
+.h3 {
+    font-size: 36px;
+    line-height: 120%;
+
+    @include tablet {
+        font-size: 30px;
+        line-height: 84%;
+    }
+
+    @include phone {
+        font-size: 25px;
+        line-height: 91%;
+    }
+}
+
+.h4 {
+    font-size: 28px;
+    line-height: 120%;
+
+    @include mobile {
+        font-size: 24px
+    }
+}
+
+.h5 {
+    font-size: 24px;
+    line-height: 120%;
+
+    @include mobile {
+        line-height: 94%;
+        letter-spacing: -0.02em;
+    }
+
+    @include phone {
+        font-size: 21px;
+    }
+}
+
+.h6 {
+    font-size: 18px;
+    line-height: 120%;
+
+    @include mobile {
+        line-height: 104%;
+        letter-spacing: -0.02em;
+        font-size: 18px;
+    }
+}
+
+.text-jumbo {
+    font-size: 48px;
+    line-height: 135%;
+    font-weight: 300;
+
+    @include mobile {
+        line-height: 150%;
+    }
+
+    @include tablet {
+        font-size: 30px;
+    }
+
+    @include phone {
+        font-size: 22px;
+    }
+}
+
+.text-l {
+    font-size: 20px;
+    line-height: 160%;
+
+    @include mobile {
+        font-size: 18px;
+        line-height: 150%;
+    }
+}
+
+.text-m {
+    font-size: 18px;
+    line-height: 160%;
+
+    a {
+        @include hover {
+            text-decoration: underline;
+        }
+    }
+
+    @include mobile {
+        font-size: 14px;
+        line-height: 150%;
+    }
+}
+
+.text-s {
+    font-size: 16px;
+    line-height: 160%;
+
+    @include mobile {
+        font-size: 12px;
+    }
+}
+
+.text-xs {
+    font-size: 14px;
+    line-height: 160%;
+    font-weight: 300;
+
+    @include mobile {
+        font-size: 12px;
+    }
+}
+
+.light {
+    font-weight: 300;
+}
+
+.bold {
+    font-weight: 700;
+}
+
+.black {
+    font-weight: 900;
+}
+
+.hollow-white {
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 2px $white;
+}
+
+.hollow-black {
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 2px $black;
+}
+
+.primary {
+    color: $primary;
+}
+
+.text-line {
+    padding: 0 40px;
+    position: relative;
+
+    &::before {
+        content: "";
+        height: 2px;
+        width: 30px;
+        position: absolute;
+        left: 0;
+        top: calc(50% + 2px);
+        background-color: $primary;
+    }
+
+    &::after {
+        content: "";
+        height: 2px;
+        width: 30px;
+        position: absolute;
+        right: 0;
+        top: calc(50% + 2px);
+        background-color: $primary;
+    }
+}

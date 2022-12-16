@@ -1,0 +1,8 @@
+.zoom-image {
+    transition: $transition-primary;
+    transition-property: transform;
+}
+
+.zoom-image--active {
+    transform: scale(1.1);
+}
