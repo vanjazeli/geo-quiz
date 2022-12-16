@@ -170,11 +170,31 @@ var app = (function () {
         }
     }
     const outroing = new Set();
+    let outros;
     function transition_in(block, local) {
         if (block && block.i) {
             outroing.delete(block);
             block.i(local);
         }
+    }
+    function transition_out(block, local, detach, callback) {
+        if (block && block.o) {
+            if (outroing.has(block))
+                return;
+            outroing.add(block);
+            outros.c.push(() => {
+                outroing.delete(block);
+                if (callback) {
+                    if (detach)
+                        block.d(1);
+                    callback();
+                }
+            });
+            block.o(local);
+        }
+    }
+    function create_component(block) {
+        block && block.c();
     }
     function mount_component(component, target, anchor, customElement) {
         const { fragment, on_mount, on_destroy, after_update } = component.$$;
@@ -324,13 +344,6 @@ var app = (function () {
         else
             dispatch_dev('SvelteDOMSetAttribute', { node, attribute, value });
     }
-    function set_data_dev(text, data) {
-        data = '' + data;
-        if (text.wholeText === data)
-            return;
-        dispatch_dev('SvelteDOMSetData', { node: text, data });
-        text.data = data;
-    }
     function validate_slots(name, slot, keys) {
         for (const slot_key of Object.keys(slot)) {
             if (!~keys.indexOf(slot_key)) {
@@ -411,205 +424,373 @@ var app = (function () {
             {
                 name: "albania",
                 flagPath: "./assets/images/flags/europe/albania.svg",
+                beenBefore: false,
             },
             {
                 name: "andorra",
                 flagPath: "./assets/images/flags/europe/andorra.svg",
+                beenBefore: false,
             },
             {
                 name: "armenia",
                 flagPath: "./assets/images/flags/europe/armenia.svg",
+                beenBefore: false,
             },
             {
                 name: "austria",
                 flagPath: "./assets/images/flags/europe/austria.svg",
+                beenBefore: false,
             },
             {
                 name: "azerbaijan",
                 flagPath: "./assets/images/flags/europe/azerbaijan.svg",
+                beenBefore: false,
             },
             {
                 name: "belarus",
                 flagPath: "./assets/images/flags/europe/belarus.svg",
+                beenBefore: false,
             },
             {
                 name: "belgium",
                 flagPath: "./assets/images/flags/europe/belgium.svg",
+                beenBefore: false,
             },
             {
-                name: "bosnia-and-herzegovina",
+                name: "bosnia and herzegovina",
                 flagPath: "./assets/images/flags/europe/bosnia-and-herzegovina.svg",
+                beenBefore: false,
             },
             {
                 name: "bulgaria",
                 flagPath: "./assets/images/flags/europe/bulgaria.svg",
+                beenBefore: false,
             },
             {
                 name: "croatia",
                 flagPath: "./assets/images/flags/europe/croatia.svg",
+                beenBefore: false,
             },
             {
                 name: "cyprus",
                 flagPath: "./assets/images/flags/europe/cyprus.svg",
+                beenBefore: false,
             },
             {
                 name: "czech-republic",
                 flagPath: "./assets/images/flags/europe/czech-republic.svg",
+                beenBefore: false,
             },
             {
                 name: "denmark",
                 flagPath: "./assets/images/flags/europe/denmark.svg",
+                beenBefore: false,
             },
             {
                 name: "estonia",
                 flagPath: "./assets/images/flags/europe/estonia.svg",
+                beenBefore: false,
             },
             {
                 name: "finland",
                 flagPath: "./assets/images/flags/europe/finland.svg",
+                beenBefore: false,
             },
             {
                 name: "france",
                 flagPath: "./assets/images/flags/europe/france.svg",
+                beenBefore: false,
             },
             {
                 name: "georgia",
                 flagPath: "./assets/images/flags/europe/georgia.svg",
+                beenBefore: false,
             },
             {
                 name: "germany",
                 flagPath: "./assets/images/flags/europe/germany.svg",
+                beenBefore: false,
             },
             {
                 name: "greece",
                 flagPath: "./assets/images/flags/europe/greece.svg",
+                beenBefore: false,
             },
             {
                 name: "hungary",
                 flagPath: "./assets/images/flags/europe/hungary.svg",
+                beenBefore: false,
             },
             {
                 name: "iceland",
                 flagPath: "./assets/images/flags/europe/iceland.svg",
+                beenBefore: false,
             },
             {
                 name: "italy",
                 flagPath: "./assets/images/flags/europe/italy.svg",
+                beenBefore: false,
             },
             {
                 name: "kazakhstan",
                 flagPath: "./assets/images/flags/europe/kazakhstan.svg",
+                beenBefore: false,
             },
             {
                 name: "latvia",
                 flagPath: "./assets/images/flags/europe/latvia.svg",
+                beenBefore: false,
             },
             {
-                name: "liechtenstain",
-                flagPath: "./assets/images/flags/europe/liechtenstain.svg",
+                name: "liechtenstein",
+                flagPath: "./assets/images/flags/europe/liechtenstein.svg",
+                beenBefore: false,
             },
             {
                 name: "lithuania",
                 flagPath: "./assets/images/flags/europe/lithuania.svg",
+                beenBefore: false,
             },
             {
                 name: "luxembourg",
                 flagPath: "./assets/images/flags/europe/luxembourg.svg",
+                beenBefore: false,
             },
             {
                 name: "malta",
                 flagPath: "./assets/images/flags/europe/malta.svg",
+                beenBefore: false,
             },
             {
                 name: "moldova",
                 flagPath: "./assets/images/flags/europe/moldova.svg",
+                beenBefore: false,
             },
             {
                 name: "monaco",
                 flagPath: "./assets/images/flags/europe/monaco.svg",
+                beenBefore: false,
             },
             {
                 name: "montenegro",
                 flagPath: "./assets/images/flags/europe/montenegro.svg",
+                beenBefore: false,
             },
             {
                 name: "netherlands",
                 flagPath: "./assets/images/flags/europe/netherlands.svg",
+                beenBefore: false,
             },
             {
                 name: "north-macedonia",
                 flagPath: "./assets/images/flags/europe/north-macedonia.svg",
+                beenBefore: false,
             },
             {
                 name: "norway",
                 flagPath: "./assets/images/flags/europe/norway.svg",
+                beenBefore: false,
             },
             {
                 name: "poland",
                 flagPath: "./assets/images/flags/europe/poland.svg",
+                beenBefore: false,
             },
             {
                 name: "portugal",
                 flagPath: "./assets/images/flags/europe/portugal.svg",
+                beenBefore: false,
             },
             {
                 name: "republic-of-ireland",
                 flagPath: "./assets/images/flags/europe/republic-of-ireland.svg",
+                beenBefore: false,
             },
             {
                 name: "romania",
                 flagPath: "./assets/images/flags/europe/romania.svg",
+                beenBefore: false,
             },
             {
                 name: "russia",
                 flagPath: "./assets/images/flags/europe/russia.svg",
+                beenBefore: false,
             },
             {
                 name: "san-marino",
                 flagPath: "./assets/images/flags/europe/san-marino.svg",
+                beenBefore: false,
             },
             {
                 name: "serbia",
                 flagPath: "./assets/images/flags/europe/serbia.svg",
+                beenBefore: false,
             },
             {
                 name: "slovakia",
                 flagPath: "./assets/images/flags/europe/slovakia.svg",
+                beenBefore: false,
             },
             {
                 name: "slovenia",
                 flagPath: "./assets/images/flags/europe/slovenia.svg",
+                beenBefore: false,
             },
             {
                 name: "spain",
                 flagPath: "./assets/images/flags/europe/spain.svg",
+                beenBefore: false,
             },
             {
                 name: "sweden",
                 flagPath: "./assets/images/flags/europe/sweden.svg",
+                beenBefore: false,
             },
             {
                 name: "switzerland",
                 flagPath: "./assets/images/flags/europe/switzerland.svg",
+                beenBefore: false,
             },
             {
                 name: "turkey",
                 flagPath: "./assets/images/flags/europe/turkey.svg",
+                beenBefore: false,
             },
             {
                 name: "ukraine",
                 flagPath: "./assets/images/flags/europe/ukraine.svg",
+                beenBefore: false,
             },
             {
                 name: "united-kingdom",
                 flagPath: "./assets/images/flags/europe/united-kingdom.svg",
+                beenBefore: false,
             },
             {
                 name: "vatican-city",
                 flagPath: "./assets/images/flags/europe/vatican-city.svg",
+                beenBefore: false,
             },
         ],
     });
+
+    /* src\components\Quiz.svelte generated by Svelte v3.46.4 */
+    const file$1 = "src\\components\\Quiz.svelte";
+
+    function create_fragment$1(ctx) {
+    	let div1;
+    	let div0;
+    	let img;
+    	let img_src_value;
+    	let img_alt_value;
+
+    	const block = {
+    		c: function create() {
+    			div1 = element("div");
+    			div0 = element("div");
+    			img = element("img");
+    			if (!src_url_equal(img.src, img_src_value = /*$flagLists*/ ctx[0].europe[1].flagPath)) attr_dev(img, "src", img_src_value);
+    			attr_dev(img, "alt", img_alt_value = /*$flagLists*/ ctx[0].europe[1].name + '.svg');
+    			attr_dev(img, "class", "quiz__image");
+    			add_location(img, file$1, 7, 8, 155);
+    			attr_dev(div0, "class", "quiz__image-wrap");
+    			add_location(div0, file$1, 6, 4, 115);
+    			attr_dev(div1, "class", "quiz");
+    			add_location(div1, file$1, 5, 0, 91);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div1, anchor);
+    			append_dev(div1, div0);
+    			append_dev(div0, img);
+    		},
+    		p: function update(ctx, [dirty]) {
+    			if (dirty & /*$flagLists*/ 1 && !src_url_equal(img.src, img_src_value = /*$flagLists*/ ctx[0].europe[1].flagPath)) {
+    				attr_dev(img, "src", img_src_value);
+    			}
+
+    			if (dirty & /*$flagLists*/ 1 && img_alt_value !== (img_alt_value = /*$flagLists*/ ctx[0].europe[1].name + '.svg')) {
+    				attr_dev(img, "alt", img_alt_value);
+    			}
+    		},
+    		i: noop,
+    		o: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div1);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$1.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$1($$self, $$props, $$invalidate) {
+    	let $flagLists;
+    	validate_store(flagLists, 'flagLists');
+    	component_subscribe($$self, flagLists, $$value => $$invalidate(0, $flagLists = $$value));
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	validate_slots('Quiz', slots, []);
+    	let { quizType } = $$props;
+    	const writable_props = ['quizType'];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Quiz> was created with unknown prop '${key}'`);
+    	});
+
+    	$$self.$$set = $$props => {
+    		if ('quizType' in $$props) $$invalidate(1, quizType = $$props.quizType);
+    	};
+
+    	$$self.$capture_state = () => ({ flagLists, quizType, $flagLists });
+
+    	$$self.$inject_state = $$props => {
+    		if ('quizType' in $$props) $$invalidate(1, quizType = $$props.quizType);
+    	};
+
+    	if ($$props && "$$inject" in $$props) {
+    		$$self.$inject_state($$props.$$inject);
+    	}
+
+    	return [$flagLists, quizType];
+    }
+
+    class Quiz extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$1, create_fragment$1, safe_not_equal, { quizType: 1 });
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "Quiz",
+    			options,
+    			id: create_fragment$1.name
+    		});
+
+    		const { ctx } = this.$$;
+    		const props = options.props || {};
+
+    		if (/*quizType*/ ctx[1] === undefined && !('quizType' in props)) {
+    			console.warn("<Quiz> was created without expected prop 'quizType'");
+    		}
+    	}
+
+    	get quizType() {
+    		throw new Error("<Quiz>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set quizType(value) {
+    		throw new Error("<Quiz>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+    }
 
     /* src\App.svelte generated by Svelte v3.46.4 */
     const file = "src\\App.svelte";
@@ -618,39 +799,36 @@ var app = (function () {
     	let link0;
     	let link1;
     	let link2;
-    	let t0;
-    	let img;
-    	let img_src_value;
-    	let img_alt_value;
-    	let t1;
-    	let h1;
-    	let t2_value = /*$flagLists*/ ctx[1].europe[/*currentIndex*/ ctx[0]].name + "";
-    	let t2;
+    	let t;
+    	let div;
+    	let quiz;
+    	let current;
+
+    	quiz = new Quiz({
+    			props: { quizType: "europe" },
+    			$$inline: true
+    		});
 
     	const block = {
     		c: function create() {
     			link0 = element("link");
     			link1 = element("link");
     			link2 = element("link");
-    			t0 = space();
-    			img = element("img");
-    			t1 = space();
-    			h1 = element("h1");
-    			t2 = text(t2_value);
+    			t = space();
+    			div = element("div");
+    			create_component(quiz.$$.fragment);
     			attr_dev(link0, "rel", "preconnect");
     			attr_dev(link0, "href", "https://fonts.googleapis.com");
-    			add_location(link0, file, 13, 4, 260);
+    			add_location(link0, file, 6, 4, 133);
     			attr_dev(link1, "rel", "preconnect");
     			attr_dev(link1, "href", "https://fonts.gstatic.com");
     			attr_dev(link1, "crossorigin", "");
-    			add_location(link1, file, 14, 4, 325);
+    			add_location(link1, file, 7, 4, 198);
     			attr_dev(link2, "href", "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap");
     			attr_dev(link2, "rel", "stylesheet");
-    			add_location(link2, file, 15, 4, 399);
-    			if (!src_url_equal(img.src, img_src_value = /*$flagLists*/ ctx[1].europe[/*currentIndex*/ ctx[0]].flagPath)) attr_dev(img, "src", img_src_value);
-    			attr_dev(img, "alt", img_alt_value = /*$flagLists*/ ctx[1].europe[/*currentIndex*/ ctx[0]].name + '.svg');
-    			add_location(img, file, 18, 0, 530);
-    			add_location(h1, file, 19, 0, 640);
+    			add_location(link2, file, 8, 4, 272);
+    			attr_dev(div, "class", "app");
+    			add_location(div, file, 11, 0, 403);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -659,33 +837,28 @@ var app = (function () {
     			append_dev(document.head, link0);
     			append_dev(document.head, link1);
     			append_dev(document.head, link2);
-    			insert_dev(target, t0, anchor);
-    			insert_dev(target, img, anchor);
-    			insert_dev(target, t1, anchor);
-    			insert_dev(target, h1, anchor);
-    			append_dev(h1, t2);
+    			insert_dev(target, t, anchor);
+    			insert_dev(target, div, anchor);
+    			mount_component(quiz, div, null);
+    			current = true;
     		},
-    		p: function update(ctx, [dirty]) {
-    			if (dirty & /*$flagLists, currentIndex*/ 3 && !src_url_equal(img.src, img_src_value = /*$flagLists*/ ctx[1].europe[/*currentIndex*/ ctx[0]].flagPath)) {
-    				attr_dev(img, "src", img_src_value);
-    			}
-
-    			if (dirty & /*$flagLists, currentIndex*/ 3 && img_alt_value !== (img_alt_value = /*$flagLists*/ ctx[1].europe[/*currentIndex*/ ctx[0]].name + '.svg')) {
-    				attr_dev(img, "alt", img_alt_value);
-    			}
-
-    			if (dirty & /*$flagLists, currentIndex*/ 3 && t2_value !== (t2_value = /*$flagLists*/ ctx[1].europe[/*currentIndex*/ ctx[0]].name + "")) set_data_dev(t2, t2_value);
+    		p: noop,
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(quiz.$$.fragment, local);
+    			current = true;
     		},
-    		i: noop,
-    		o: noop,
+    		o: function outro(local) {
+    			transition_out(quiz.$$.fragment, local);
+    			current = false;
+    		},
     		d: function destroy(detaching) {
     			detach_dev(link0);
     			detach_dev(link1);
     			detach_dev(link2);
-    			if (detaching) detach_dev(t0);
-    			if (detaching) detach_dev(img);
-    			if (detaching) detach_dev(t1);
-    			if (detaching) detach_dev(h1);
+    			if (detaching) detach_dev(t);
+    			if (detaching) detach_dev(div);
+    			destroy_component(quiz);
     		}
     	};
 
@@ -701,46 +874,16 @@ var app = (function () {
     }
 
     function instance($$self, $$props, $$invalidate) {
-    	let $flagLists;
-    	validate_store(flagLists, 'flagLists');
-    	component_subscribe($$self, flagLists, $$value => $$invalidate(1, $flagLists = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('App', slots, []);
-    	let currentIndex = 0;
-
-    	const shifting = () => {
-    		setTimeout(
-    			() => {
-    				$$invalidate(0, currentIndex++, currentIndex);
-    				shifting();
-    			},
-    			1000
-    		);
-    	};
-
-    	shifting();
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<App> was created with unknown prop '${key}'`);
     	});
 
-    	$$self.$capture_state = () => ({
-    		flagLists,
-    		currentIndex,
-    		shifting,
-    		$flagLists
-    	});
-
-    	$$self.$inject_state = $$props => {
-    		if ('currentIndex' in $$props) $$invalidate(0, currentIndex = $$props.currentIndex);
-    	};
-
-    	if ($$props && "$$inject" in $$props) {
-    		$$self.$inject_state($$props.$$inject);
-    	}
-
-    	return [currentIndex, $flagLists];
+    	$$self.$capture_state = () => ({ flagLists, Quiz });
+    	return [];
     }
 
     class App extends SvelteComponentDev {
