@@ -1,13 +1,6 @@
 <script>
     import {flagLists} from './stores';
-    let currentIndex = 0;
-    const shifting = ()=>{
-        setTimeout(()=>{
-            currentIndex++;
-            shifting();
-        },1000);
-    }
-    shifting();
+    import Quiz from './components/Quiz.svelte';
 </script>
 
 <svelte:head>
@@ -16,5 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
 </svelte:head>
 
-<img src="{$flagLists.europe[currentIndex].flagPath}" alt="{$flagLists.europe[currentIndex].name + '.svg'}">
-<h1>{$flagLists.europe[currentIndex].name}</h1>
+<div class="app">
+    <div class="app__wrap">
+        <Quiz quizType="europe"/>
+    </div>
+</div>

@@ -31,7 +31,7 @@ export const flagLists = writable({
             flagPath: "./assets/images/flags/europe/belgium.svg",
         },
         {
-            name: "bosnia-and-herzegovina",
+            name: "bosnia and herzegovina",
             flagPath: "./assets/images/flags/europe/bosnia-and-herzegovina.svg",
         },
         {
@@ -47,7 +47,7 @@ export const flagLists = writable({
             flagPath: "./assets/images/flags/europe/cyprus.svg",
         },
         {
-            name: "czech-republic",
+            name: "czech republic",
             flagPath: "./assets/images/flags/europe/czech-republic.svg",
         },
         {
@@ -99,8 +99,8 @@ export const flagLists = writable({
             flagPath: "./assets/images/flags/europe/latvia.svg",
         },
         {
-            name: "liechtenstain",
-            flagPath: "./assets/images/flags/europe/liechtenstain.svg",
+            name: "liechtenstein",
+            flagPath: "./assets/images/flags/europe/liechtenstein.svg",
         },
         {
             name: "lithuania",
@@ -131,7 +131,7 @@ export const flagLists = writable({
             flagPath: "./assets/images/flags/europe/netherlands.svg",
         },
         {
-            name: "north-macedonia",
+            name: "north macedonia",
             flagPath: "./assets/images/flags/europe/north-macedonia.svg",
         },
         {
@@ -147,7 +147,7 @@ export const flagLists = writable({
             flagPath: "./assets/images/flags/europe/portugal.svg",
         },
         {
-            name: "republic-of-ireland",
+            name: "republic of ireland",
             flagPath: "./assets/images/flags/europe/republic-of-ireland.svg",
         },
         {

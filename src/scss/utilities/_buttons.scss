@@ -1,27 +1,21 @@
 // buttons
 
-button{
+button {
     font-family: $default-font;
 }
 
-.arrow-button {
-    font-weight: 300;
-    color: $white;
-    font-size: 14px;
-    position: relative;
-    @include flex-c-c;
-
-    @include hover {
-        .arrow-button__icon {
-            transform: rotate(90deg);
-        }
-    }
+.button-main {
+    background-color: $white;
+    padding: 10px;
+    font-weight: 700;
+    border-radius: 10px;
+    font-size: 20px;
 }
 
-.arrow-button__icon {
-    width: 12px;
-    display: inline-block;
-    margin-left: 10px;
-    transition: $transition-primary;
-    transition-property: transform;
+.hover-default{
+    transition: $transition-fast;
+    transition-property: opacity;
+    @include hover{
+        opacity: 0.8;
+    }
 }

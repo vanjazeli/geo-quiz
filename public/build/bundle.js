@@ -68,6 +68,17 @@ var app = (function () {
     function space() {
         return text(' ');
     }
+    function listen(node, event, handler, options) {
+        node.addEventListener(event, handler, options);
+        return () => node.removeEventListener(event, handler, options);
+    }
+    function prevent_default(fn) {
+        return function (event) {
+            event.preventDefault();
+            // @ts-ignore
+            return fn.call(this, event);
+        };
+    }
     function attr(node, attribute, value) {
         if (value == null)
             node.removeAttribute(attribute);
@@ -76,6 +87,9 @@ var app = (function () {
     }
     function children(element) {
         return Array.from(element.childNodes);
+    }
+    function set_input_value(input, value) {
+        input.value = value == null ? '' : value;
     }
     function custom_event(type, detail, bubbles = false) {
         const e = document.createEvent('CustomEvent');
@@ -193,6 +207,12 @@ var app = (function () {
             block.o(local);
         }
     }
+
+    const globals = (typeof window !== 'undefined'
+        ? window
+        : typeof globalThis !== 'undefined'
+            ? globalThis
+            : global);
     function create_component(block) {
         block && block.c();
     }
@@ -337,12 +357,32 @@ var app = (function () {
         dispatch_dev('SvelteDOMRemove', { node });
         detach(node);
     }
+    function listen_dev(node, event, handler, options, has_prevent_default, has_stop_propagation) {
+        const modifiers = options === true ? ['capture'] : options ? Array.from(Object.keys(options)) : [];
+        if (has_prevent_default)
+            modifiers.push('preventDefault');
+        if (has_stop_propagation)
+            modifiers.push('stopPropagation');
+        dispatch_dev('SvelteDOMAddEventListener', { node, event, handler, modifiers });
+        const dispose = listen(node, event, handler, options);
+        return () => {
+            dispatch_dev('SvelteDOMRemoveEventListener', { node, event, handler, modifiers });
+            dispose();
+        };
+    }
     function attr_dev(node, attribute, value) {
         attr(node, attribute, value);
         if (value == null)
             dispatch_dev('SvelteDOMRemoveAttribute', { node, attribute });
         else
             dispatch_dev('SvelteDOMSetAttribute', { node, attribute, value });
+    }
+    function set_data_dev(text, data) {
+        data = '' + data;
+        if (text.wholeText === data)
+            return;
+        dispatch_dev('SvelteDOMSetData', { node: text, data });
+        text.data = data;
     }
     function validate_slots(name, slot, keys) {
         for (const slot_key of Object.keys(slot)) {
@@ -424,301 +464,445 @@ var app = (function () {
             {
                 name: "albania",
                 flagPath: "./assets/images/flags/europe/albania.svg",
-                beenBefore: false,
             },
             {
                 name: "andorra",
                 flagPath: "./assets/images/flags/europe/andorra.svg",
-                beenBefore: false,
             },
             {
                 name: "armenia",
                 flagPath: "./assets/images/flags/europe/armenia.svg",
-                beenBefore: false,
             },
             {
                 name: "austria",
                 flagPath: "./assets/images/flags/europe/austria.svg",
-                beenBefore: false,
             },
             {
                 name: "azerbaijan",
                 flagPath: "./assets/images/flags/europe/azerbaijan.svg",
-                beenBefore: false,
             },
             {
                 name: "belarus",
                 flagPath: "./assets/images/flags/europe/belarus.svg",
-                beenBefore: false,
             },
             {
                 name: "belgium",
                 flagPath: "./assets/images/flags/europe/belgium.svg",
-                beenBefore: false,
             },
             {
                 name: "bosnia and herzegovina",
                 flagPath: "./assets/images/flags/europe/bosnia-and-herzegovina.svg",
-                beenBefore: false,
             },
             {
                 name: "bulgaria",
                 flagPath: "./assets/images/flags/europe/bulgaria.svg",
-                beenBefore: false,
             },
             {
                 name: "croatia",
                 flagPath: "./assets/images/flags/europe/croatia.svg",
-                beenBefore: false,
             },
             {
                 name: "cyprus",
                 flagPath: "./assets/images/flags/europe/cyprus.svg",
-                beenBefore: false,
             },
             {
-                name: "czech-republic",
+                name: "czech republic",
                 flagPath: "./assets/images/flags/europe/czech-republic.svg",
-                beenBefore: false,
             },
             {
                 name: "denmark",
                 flagPath: "./assets/images/flags/europe/denmark.svg",
-                beenBefore: false,
             },
             {
                 name: "estonia",
                 flagPath: "./assets/images/flags/europe/estonia.svg",
-                beenBefore: false,
             },
             {
                 name: "finland",
                 flagPath: "./assets/images/flags/europe/finland.svg",
-                beenBefore: false,
             },
             {
                 name: "france",
                 flagPath: "./assets/images/flags/europe/france.svg",
-                beenBefore: false,
             },
             {
                 name: "georgia",
                 flagPath: "./assets/images/flags/europe/georgia.svg",
-                beenBefore: false,
             },
             {
                 name: "germany",
                 flagPath: "./assets/images/flags/europe/germany.svg",
-                beenBefore: false,
             },
             {
                 name: "greece",
                 flagPath: "./assets/images/flags/europe/greece.svg",
-                beenBefore: false,
             },
             {
                 name: "hungary",
                 flagPath: "./assets/images/flags/europe/hungary.svg",
-                beenBefore: false,
             },
             {
                 name: "iceland",
                 flagPath: "./assets/images/flags/europe/iceland.svg",
-                beenBefore: false,
             },
             {
                 name: "italy",
                 flagPath: "./assets/images/flags/europe/italy.svg",
-                beenBefore: false,
             },
             {
                 name: "kazakhstan",
                 flagPath: "./assets/images/flags/europe/kazakhstan.svg",
-                beenBefore: false,
             },
             {
                 name: "latvia",
                 flagPath: "./assets/images/flags/europe/latvia.svg",
-                beenBefore: false,
             },
             {
                 name: "liechtenstein",
                 flagPath: "./assets/images/flags/europe/liechtenstein.svg",
-                beenBefore: false,
             },
             {
                 name: "lithuania",
                 flagPath: "./assets/images/flags/europe/lithuania.svg",
-                beenBefore: false,
             },
             {
                 name: "luxembourg",
                 flagPath: "./assets/images/flags/europe/luxembourg.svg",
-                beenBefore: false,
             },
             {
                 name: "malta",
                 flagPath: "./assets/images/flags/europe/malta.svg",
-                beenBefore: false,
             },
             {
                 name: "moldova",
                 flagPath: "./assets/images/flags/europe/moldova.svg",
-                beenBefore: false,
             },
             {
                 name: "monaco",
                 flagPath: "./assets/images/flags/europe/monaco.svg",
-                beenBefore: false,
             },
             {
                 name: "montenegro",
                 flagPath: "./assets/images/flags/europe/montenegro.svg",
-                beenBefore: false,
             },
             {
                 name: "netherlands",
                 flagPath: "./assets/images/flags/europe/netherlands.svg",
-                beenBefore: false,
             },
             {
-                name: "north-macedonia",
+                name: "north macedonia",
                 flagPath: "./assets/images/flags/europe/north-macedonia.svg",
-                beenBefore: false,
             },
             {
                 name: "norway",
                 flagPath: "./assets/images/flags/europe/norway.svg",
-                beenBefore: false,
             },
             {
                 name: "poland",
                 flagPath: "./assets/images/flags/europe/poland.svg",
-                beenBefore: false,
             },
             {
                 name: "portugal",
                 flagPath: "./assets/images/flags/europe/portugal.svg",
-                beenBefore: false,
             },
             {
-                name: "republic-of-ireland",
+                name: "republic of ireland",
                 flagPath: "./assets/images/flags/europe/republic-of-ireland.svg",
-                beenBefore: false,
             },
             {
                 name: "romania",
                 flagPath: "./assets/images/flags/europe/romania.svg",
-                beenBefore: false,
             },
             {
                 name: "russia",
                 flagPath: "./assets/images/flags/europe/russia.svg",
-                beenBefore: false,
             },
             {
                 name: "san-marino",
                 flagPath: "./assets/images/flags/europe/san-marino.svg",
-                beenBefore: false,
             },
             {
                 name: "serbia",
                 flagPath: "./assets/images/flags/europe/serbia.svg",
-                beenBefore: false,
             },
             {
                 name: "slovakia",
                 flagPath: "./assets/images/flags/europe/slovakia.svg",
-                beenBefore: false,
             },
             {
                 name: "slovenia",
                 flagPath: "./assets/images/flags/europe/slovenia.svg",
-                beenBefore: false,
             },
             {
                 name: "spain",
                 flagPath: "./assets/images/flags/europe/spain.svg",
-                beenBefore: false,
             },
             {
                 name: "sweden",
                 flagPath: "./assets/images/flags/europe/sweden.svg",
-                beenBefore: false,
             },
             {
                 name: "switzerland",
                 flagPath: "./assets/images/flags/europe/switzerland.svg",
-                beenBefore: false,
             },
             {
                 name: "turkey",
                 flagPath: "./assets/images/flags/europe/turkey.svg",
-                beenBefore: false,
             },
             {
                 name: "ukraine",
                 flagPath: "./assets/images/flags/europe/ukraine.svg",
-                beenBefore: false,
             },
             {
                 name: "united-kingdom",
                 flagPath: "./assets/images/flags/europe/united-kingdom.svg",
-                beenBefore: false,
             },
             {
                 name: "vatican-city",
                 flagPath: "./assets/images/flags/europe/vatican-city.svg",
-                beenBefore: false,
             },
         ],
     });
 
     /* src\components\Quiz.svelte generated by Svelte v3.46.4 */
+
+    const { console: console_1 } = globals;
     const file$1 = "src\\components\\Quiz.svelte";
 
-    function create_fragment$1(ctx) {
-    	let div1;
-    	let div0;
-    	let img;
-    	let img_src_value;
-    	let img_alt_value;
+    // (54:4) {#if incorrect}
+    function create_if_block(ctx) {
+    	let span1;
+    	let t0;
+    	let span0;
+    	let t1_value = /*flagList*/ ctx[5][/*current*/ ctx[1] - 1].name + "";
+    	let t1;
 
     	const block = {
     		c: function create() {
+    			span1 = element("span");
+    			t0 = text("Previous answer was ");
+    			span0 = element("span");
+    			t1 = text(t1_value);
+    			attr_dev(span0, "class", "quiz__country-name");
+    			add_location(span0, file$1, 54, 52, 1892);
+    			attr_dev(span1, "class", "quiz__message");
+    			add_location(span1, file$1, 54, 4, 1844);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, span1, anchor);
+    			append_dev(span1, t0);
+    			append_dev(span1, span0);
+    			append_dev(span0, t1);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*current*/ 2 && t1_value !== (t1_value = /*flagList*/ ctx[5][/*current*/ ctx[1] - 1].name + "")) set_data_dev(t1, t1_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(span1);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block.name,
+    		type: "if",
+    		source: "(54:4) {#if incorrect}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment$1(ctx) {
+    	let div5;
+    	let div1;
+    	let div0;
+    	let img0;
+    	let img0_src_value;
+    	let img0_alt_value;
+    	let t0;
+    	let div2;
+    	let img1;
+    	let img1_src_value;
+    	let img1_alt_value;
+    	let t1;
+    	let div4;
+    	let div3;
+    	let span0;
+    	let t3;
+    	let span1;
+    	let t4_value = /*current*/ ctx[1] + 1 + "";
+    	let t4;
+    	let t5;
+    	let span2;
+    	let t7;
+    	let span3;
+    	let t8;
+    	let t9;
+    	let form;
+    	let input;
+    	let input_class_value;
+    	let t10;
+    	let button;
+    	let t12;
+    	let mounted;
+    	let dispose;
+    	let if_block = /*incorrect*/ ctx[4] && create_if_block(ctx);
+
+    	const block = {
+    		c: function create() {
+    			div5 = element("div");
     			div1 = element("div");
     			div0 = element("div");
-    			img = element("img");
-    			if (!src_url_equal(img.src, img_src_value = /*$flagLists*/ ctx[0].europe[1].flagPath)) attr_dev(img, "src", img_src_value);
-    			attr_dev(img, "alt", img_alt_value = /*$flagLists*/ ctx[0].europe[1].name + '.svg');
-    			attr_dev(img, "class", "quiz__image");
-    			add_location(img, file$1, 7, 8, 155);
-    			attr_dev(div0, "class", "quiz__image-wrap");
-    			add_location(div0, file$1, 6, 4, 115);
-    			attr_dev(div1, "class", "quiz");
-    			add_location(div1, file$1, 5, 0, 91);
+    			img0 = element("img");
+    			t0 = space();
+    			div2 = element("div");
+    			img1 = element("img");
+    			t1 = space();
+    			div4 = element("div");
+    			div3 = element("div");
+    			span0 = element("span");
+    			span0.textContent = "Score:";
+    			t3 = space();
+    			span1 = element("span");
+    			t4 = text(t4_value);
+    			t5 = space();
+    			span2 = element("span");
+    			span2.textContent = `${/*total*/ ctx[6]}`;
+    			t7 = space();
+    			span3 = element("span");
+    			t8 = text(/*score*/ ctx[2]);
+    			t9 = space();
+    			form = element("form");
+    			input = element("input");
+    			t10 = space();
+    			button = element("button");
+    			button.textContent = "Enter";
+    			t12 = space();
+    			if (if_block) if_block.c();
+    			if (!src_url_equal(img0.src, img0_src_value = /*flagList*/ ctx[5][/*current*/ ctx[1]].flagPath)) attr_dev(img0, "src", img0_src_value);
+    			attr_dev(img0, "alt", img0_alt_value = /*flagList*/ ctx[5][/*current*/ ctx[1]].name + ' - flag');
+    			attr_dev(img0, "class", "quiz__background");
+    			add_location(img0, file$1, 35, 12, 924);
+    			attr_dev(div0, "class", "quiz__background-holder");
+    			add_location(div0, file$1, 34, 8, 873);
+    			attr_dev(div1, "class", "quiz__background-wrap");
+    			add_location(div1, file$1, 33, 4, 828);
+    			if (!src_url_equal(img1.src, img1_src_value = /*flagList*/ ctx[5][/*current*/ ctx[1]].flagPath)) attr_dev(img1, "src", img1_src_value);
+    			attr_dev(img1, "alt", img1_alt_value = /*flagList*/ ctx[5][/*current*/ ctx[1]].name + ' - flag');
+    			attr_dev(img1, "class", "quiz__image");
+    			add_location(img1, file$1, 39, 8, 1106);
+    			attr_dev(div2, "class", "quiz__image-wrap");
+    			add_location(div2, file$1, 38, 4, 1066);
+    			add_location(span0, file$1, 43, 12, 1301);
+    			attr_dev(span1, "class", "quiz__current");
+    			add_location(span1, file$1, 44, 12, 1335);
+    			add_location(span2, file$1, 45, 12, 1397);
+    			attr_dev(div3, "class", "quiz__score");
+    			add_location(div3, file$1, 42, 8, 1262);
+    			attr_dev(span3, "class", "quiz__percentage");
+    			add_location(span3, file$1, 47, 8, 1443);
+    			attr_dev(div4, "class", "quiz__board");
+    			add_location(div4, file$1, 41, 4, 1227);
+    			attr_dev(input, "type", "text");
+    			attr_dev(input, "class", input_class_value = "quiz__input hover-default " + (/*correct*/ ctx[3] ? 'quiz__input--correct' : '') + " " + (/*incorrect*/ ctx[4] ? 'quiz__input--incorrect' : ''));
+    			add_location(input, file$1, 50, 8, 1582);
+    			attr_dev(button, "class", "button-main hover-default");
+    			add_location(button, file$1, 51, 8, 1748);
+    			attr_dev(form, "class", "quiz__form");
+    			add_location(form, file$1, 49, 4, 1506);
+    			attr_dev(div5, "class", "quiz");
+    			add_location(div5, file$1, 32, 0, 804);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, div1, anchor);
+    			insert_dev(target, div5, anchor);
+    			append_dev(div5, div1);
     			append_dev(div1, div0);
-    			append_dev(div0, img);
+    			append_dev(div0, img0);
+    			append_dev(div5, t0);
+    			append_dev(div5, div2);
+    			append_dev(div2, img1);
+    			append_dev(div5, t1);
+    			append_dev(div5, div4);
+    			append_dev(div4, div3);
+    			append_dev(div3, span0);
+    			append_dev(div3, t3);
+    			append_dev(div3, span1);
+    			append_dev(span1, t4);
+    			append_dev(div3, t5);
+    			append_dev(div3, span2);
+    			append_dev(div4, t7);
+    			append_dev(div4, span3);
+    			append_dev(span3, t8);
+    			append_dev(div5, t9);
+    			append_dev(div5, form);
+    			append_dev(form, input);
+    			set_input_value(input, /*answer*/ ctx[0]);
+    			append_dev(form, t10);
+    			append_dev(form, button);
+    			append_dev(div5, t12);
+    			if (if_block) if_block.m(div5, null);
+
+    			if (!mounted) {
+    				dispose = [
+    					listen_dev(input, "input", /*input_input_handler*/ ctx[9]),
+    					listen_dev(form, "submit", prevent_default(/*submitHandler*/ ctx[7]), false, true, false)
+    				];
+
+    				mounted = true;
+    			}
     		},
     		p: function update(ctx, [dirty]) {
-    			if (dirty & /*$flagLists*/ 1 && !src_url_equal(img.src, img_src_value = /*$flagLists*/ ctx[0].europe[1].flagPath)) {
-    				attr_dev(img, "src", img_src_value);
+    			if (dirty & /*current*/ 2 && !src_url_equal(img0.src, img0_src_value = /*flagList*/ ctx[5][/*current*/ ctx[1]].flagPath)) {
+    				attr_dev(img0, "src", img0_src_value);
     			}
 
-    			if (dirty & /*$flagLists*/ 1 && img_alt_value !== (img_alt_value = /*$flagLists*/ ctx[0].europe[1].name + '.svg')) {
-    				attr_dev(img, "alt", img_alt_value);
+    			if (dirty & /*current*/ 2 && img0_alt_value !== (img0_alt_value = /*flagList*/ ctx[5][/*current*/ ctx[1]].name + ' - flag')) {
+    				attr_dev(img0, "alt", img0_alt_value);
+    			}
+
+    			if (dirty & /*current*/ 2 && !src_url_equal(img1.src, img1_src_value = /*flagList*/ ctx[5][/*current*/ ctx[1]].flagPath)) {
+    				attr_dev(img1, "src", img1_src_value);
+    			}
+
+    			if (dirty & /*current*/ 2 && img1_alt_value !== (img1_alt_value = /*flagList*/ ctx[5][/*current*/ ctx[1]].name + ' - flag')) {
+    				attr_dev(img1, "alt", img1_alt_value);
+    			}
+
+    			if (dirty & /*current*/ 2 && t4_value !== (t4_value = /*current*/ ctx[1] + 1 + "")) set_data_dev(t4, t4_value);
+    			if (dirty & /*score*/ 4) set_data_dev(t8, /*score*/ ctx[2]);
+
+    			if (dirty & /*correct, incorrect*/ 24 && input_class_value !== (input_class_value = "quiz__input hover-default " + (/*correct*/ ctx[3] ? 'quiz__input--correct' : '') + " " + (/*incorrect*/ ctx[4] ? 'quiz__input--incorrect' : ''))) {
+    				attr_dev(input, "class", input_class_value);
+    			}
+
+    			if (dirty & /*answer*/ 1 && input.value !== /*answer*/ ctx[0]) {
+    				set_input_value(input, /*answer*/ ctx[0]);
+    			}
+
+    			if (/*incorrect*/ ctx[4]) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+    				} else {
+    					if_block = create_if_block(ctx);
+    					if_block.c();
+    					if_block.m(div5, null);
+    				}
+    			} else if (if_block) {
+    				if_block.d(1);
+    				if_block = null;
     			}
     		},
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(div1);
+    			if (detaching) detach_dev(div5);
+    			if (if_block) if_block.d();
+    			mounted = false;
+    			run_all(dispose);
     		}
     	};
 
@@ -736,37 +920,99 @@ var app = (function () {
     function instance$1($$self, $$props, $$invalidate) {
     	let $flagLists;
     	validate_store(flagLists, 'flagLists');
-    	component_subscribe($$self, flagLists, $$value => $$invalidate(0, $flagLists = $$value));
+    	component_subscribe($$self, flagLists, $$value => $$invalidate(11, $flagLists = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('Quiz', slots, []);
     	let { quizType } = $$props;
+    	const flagList = $flagLists[quizType];
+    	let answer = '';
+    	let current = 0;
+    	const total = $flagLists[quizType].length;
+    	let correctAnswers = 0;
+    	let score = 0;
+    	let correct = false;
+    	let incorrect = false;
+
+    	const submitHandler = () => {
+    		if (answer === flagList[current].name) {
+    			$$invalidate(3, correct = true);
+    			$$invalidate(4, incorrect = false);
+    			correctAnswers++;
+    			$$invalidate(2, score = correctAnswers / current);
+    		} else {
+    			$$invalidate(4, incorrect = true);
+    			$$invalidate(3, correct = false);
+    		}
+
+    		if (current < total - 1) {
+    			$$invalidate(1, current++, current);
+    		} else {
+    			console.log("Here should go somehting else!");
+    		}
+    	};
+
     	const writable_props = ['quizType'];
 
     	Object.keys($$props).forEach(key => {
-    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Quiz> was created with unknown prop '${key}'`);
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1.warn(`<Quiz> was created with unknown prop '${key}'`);
     	});
 
+    	function input_input_handler() {
+    		answer = this.value;
+    		$$invalidate(0, answer);
+    	}
+
     	$$self.$$set = $$props => {
-    		if ('quizType' in $$props) $$invalidate(1, quizType = $$props.quizType);
+    		if ('quizType' in $$props) $$invalidate(8, quizType = $$props.quizType);
     	};
 
-    	$$self.$capture_state = () => ({ flagLists, quizType, $flagLists });
+    	$$self.$capture_state = () => ({
+    		flagLists,
+    		quizType,
+    		flagList,
+    		answer,
+    		current,
+    		total,
+    		correctAnswers,
+    		score,
+    		correct,
+    		incorrect,
+    		submitHandler,
+    		$flagLists
+    	});
 
     	$$self.$inject_state = $$props => {
-    		if ('quizType' in $$props) $$invalidate(1, quizType = $$props.quizType);
+    		if ('quizType' in $$props) $$invalidate(8, quizType = $$props.quizType);
+    		if ('answer' in $$props) $$invalidate(0, answer = $$props.answer);
+    		if ('current' in $$props) $$invalidate(1, current = $$props.current);
+    		if ('correctAnswers' in $$props) correctAnswers = $$props.correctAnswers;
+    		if ('score' in $$props) $$invalidate(2, score = $$props.score);
+    		if ('correct' in $$props) $$invalidate(3, correct = $$props.correct);
+    		if ('incorrect' in $$props) $$invalidate(4, incorrect = $$props.incorrect);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [$flagLists, quizType];
+    	return [
+    		answer,
+    		current,
+    		score,
+    		correct,
+    		incorrect,
+    		flagList,
+    		total,
+    		submitHandler,
+    		quizType,
+    		input_input_handler
+    	];
     }
 
     class Quiz extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$1, create_fragment$1, safe_not_equal, { quizType: 1 });
+    		init(this, options, instance$1, create_fragment$1, safe_not_equal, { quizType: 8 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -778,8 +1024,8 @@ var app = (function () {
     		const { ctx } = this.$$;
     		const props = options.props || {};
 
-    		if (/*quizType*/ ctx[1] === undefined && !('quizType' in props)) {
-    			console.warn("<Quiz> was created without expected prop 'quizType'");
+    		if (/*quizType*/ ctx[8] === undefined && !('quizType' in props)) {
+    			console_1.warn("<Quiz> was created without expected prop 'quizType'");
     		}
     	}
 
@@ -800,7 +1046,8 @@ var app = (function () {
     	let link1;
     	let link2;
     	let t;
-    	let div;
+    	let div1;
+    	let div0;
     	let quiz;
     	let current;
 
@@ -815,7 +1062,8 @@ var app = (function () {
     			link1 = element("link");
     			link2 = element("link");
     			t = space();
-    			div = element("div");
+    			div1 = element("div");
+    			div0 = element("div");
     			create_component(quiz.$$.fragment);
     			attr_dev(link0, "rel", "preconnect");
     			attr_dev(link0, "href", "https://fonts.googleapis.com");
@@ -827,8 +1075,10 @@ var app = (function () {
     			attr_dev(link2, "href", "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap");
     			attr_dev(link2, "rel", "stylesheet");
     			add_location(link2, file, 8, 4, 272);
-    			attr_dev(div, "class", "app");
-    			add_location(div, file, 11, 0, 403);
+    			attr_dev(div0, "class", "app__wrap");
+    			add_location(div0, file, 12, 4, 426);
+    			attr_dev(div1, "class", "app");
+    			add_location(div1, file, 11, 0, 403);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -838,8 +1088,9 @@ var app = (function () {
     			append_dev(document.head, link1);
     			append_dev(document.head, link2);
     			insert_dev(target, t, anchor);
-    			insert_dev(target, div, anchor);
-    			mount_component(quiz, div, null);
+    			insert_dev(target, div1, anchor);
+    			append_dev(div1, div0);
+    			mount_component(quiz, div0, null);
     			current = true;
     		},
     		p: noop,
@@ -857,7 +1108,7 @@ var app = (function () {
     			detach_dev(link1);
     			detach_dev(link2);
     			if (detaching) detach_dev(t);
-    			if (detaching) detach_dev(div);
+    			if (detaching) detach_dev(div1);
     			destroy_component(quiz);
     		}
     	};
