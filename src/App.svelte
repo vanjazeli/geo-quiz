@@ -1,6 +1,9 @@
 <script>
-    import {flagLists} from './stores';
+    import {flagLists, view} from './stores';
+    import Menu from './components/Menu.svelte';
     import Quiz from './components/Quiz.svelte';
+
+    let list = Object.keys($flagLists);
 </script>
 
 <svelte:head>
@@ -12,6 +15,14 @@
 
 <div class="app">
     <div class="app__wrap">
+        {#if $view === 'menu'}
+        <Menu/>
+        {/if}
+        {#if $view === "europe"}
         <Quiz quizType="europe"/>
+        {/if}
+        {#if $view === "northAmerica"}
+        <Quiz quizType="northAmerica"/>
+        {/if}
     </div>
 </div>

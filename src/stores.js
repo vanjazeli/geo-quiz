@@ -203,4 +203,110 @@ export const flagLists = writable({
             flagPath: "./assets/images/flags/europe/vatican.svg",
         },
     ],
+    northAmerica: [
+        {
+            name: "antigua and barbuda",
+            flagPath:
+                "./assets/images/flags/north-america/antigua-and-barbuda.svg",
+        },
+        {
+            name: "bahamas",
+            flagPath: "./assets/images/flags/north-america/bahamas.svg",
+        },
+        {
+            name: "barbados",
+            flagPath: "./assets/images/flags/north-america/barbados.svg",
+        },
+        {
+            name: "belize",
+            flagPath: "./assets/images/flags/north-america/belize.svg",
+        },
+        {
+            name: "canada",
+            flagPath: "./assets/images/flags/north-america/canada.svg",
+        },
+        {
+            name: "costa rica",
+            flagPath: "./assets/images/flags/north-america/costa-rica.svg",
+        },
+        {
+            name: "cuba",
+            flagPath: "./assets/images/flags/north-america/cuba.svg",
+        },
+        {
+            name: "dominica",
+            flagPath: "./assets/images/flags/north-america/dominica.svg",
+        },
+        {
+            name: "dominican republic",
+            flagPath:
+                "./assets/images/flags/north-america/dominican-republic.svg",
+        },
+        {
+            name: "el salvador",
+            flagPath: "./assets/images/flags/north-america/el-salvador.svg",
+        },
+        {
+            name: "greenland",
+            flagPath: "./assets/images/flags/north-america/greenland.svg",
+        },
+        {
+            name: "grenada",
+            flagPath: "./assets/images/flags/north-america/grenada.svg",
+        },
+        {
+            name: "guatemala",
+            flagPath: "./assets/images/flags/north-america/guatemala.svg",
+        },
+        {
+            name: "haiti",
+            flagPath: "./assets/images/flags/north-america/haiti.svg",
+        },
+        {
+            name: "honduras",
+            flagPath: "./assets/images/flags/north-america/honduras.svg",
+        },
+        {
+            name: "jamaica",
+            flagPath: "./assets/images/flags/north-america/jamaica.svg",
+        },
+        {
+            name: "mexico",
+            flagPath: "./assets/images/flags/north-america/mexico.svg",
+        },
+        {
+            name: "nicaragua",
+            flagPath: "./assets/images/flags/north-america/nicaragua.svg",
+        },
+        {
+            name: "panama",
+            flagPath: "./assets/images/flags/north-america/panama.svg",
+        },
+        {
+            name: "saint kitts and nevis",
+            flagPath:
+                "./assets/images/flags/north-america/saint-kitts-and-nevis.svg",
+        },
+        {
+            name: "saint lucia",
+            flagPath: "./assets/images/flags/north-america/saint-lucia.svg",
+        },
+        {
+            name: "saint vincent and the grenadines",
+            flagPath:
+                "./assets/images/flags/north-america/saint-vincent-and-the-grenadines.svg",
+        },
+        {
+            name: "trinidad and tobago",
+            flagPath:
+                "./assets/images/flags/north-america/trinidad-and-tobago.svg",
+        },
+        {
+            name: "united states of america",
+            flagPath:
+                "./assets/images/flags/north-america/united-states-of-america.svg",
+        },
+    ],
 });
+
+export const view = writable("menu");

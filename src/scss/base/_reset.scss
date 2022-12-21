@@ -103,6 +103,9 @@ section {
 
 body {
   font-family: $default-font;
+  position: relative;
+  min-height:100vh;
+  padding-bottom: 5vh;
 }
 
 button {

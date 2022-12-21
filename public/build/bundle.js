@@ -50,6 +50,10 @@ var app = (function () {
     function component_subscribe(component, store, callback) {
         component.$$.on_destroy.push(subscribe(store, callback));
     }
+    function set_store_value(store, ret, value) {
+        store.set(value);
+        return ret;
+    }
     function append(target, node) {
         target.appendChild(node);
     }
@@ -58,6 +62,12 @@ var app = (function () {
     }
     function detach(node) {
         node.parentNode.removeChild(node);
+    }
+    function destroy_each(iterations, detaching) {
+        for (let i = 0; i < iterations.length; i += 1) {
+            if (iterations[i])
+                iterations[i].d(detaching);
+        }
     }
     function element(name) {
         return document.createElement(name);
@@ -90,6 +100,9 @@ var app = (function () {
     }
     function set_input_value(input, value) {
         input.value = value == null ? '' : value;
+    }
+    function toggle_class(element, name, toggle) {
+        element.classList[toggle ? 'add' : 'remove'](name);
     }
     function custom_event(type, detail, bubbles = false) {
         const e = document.createEvent('CustomEvent');
@@ -185,6 +198,19 @@ var app = (function () {
     }
     const outroing = new Set();
     let outros;
+    function group_outros() {
+        outros = {
+            r: 0,
+            c: [],
+            p: outros // parent group
+        };
+    }
+    function check_outros() {
+        if (!outros.r) {
+            run_all(outros.c);
+        }
+        outros = outros.p;
+    }
     function transition_in(block, local) {
         if (block && block.i) {
             outroing.delete(block);
@@ -207,6 +233,12 @@ var app = (function () {
             block.o(local);
         }
     }
+
+    const globals = (typeof window !== 'undefined'
+        ? window
+        : typeof globalThis !== 'undefined'
+            ? globalThis
+            : global);
     function create_component(block) {
         block && block.c();
     }
@@ -377,6 +409,15 @@ var app = (function () {
             return;
         dispatch_dev('SvelteDOMSetData', { node: text, data });
         text.data = data;
+    }
+    function validate_each_argument(arg) {
+        if (typeof arg !== 'string' && !(arg && typeof arg === 'object' && 'length' in arg)) {
+            let msg = '{#each} only iterates over array-like objects.';
+            if (typeof Symbol === 'function' && arg && Symbol.iterator in arg) {
+                msg += ' You can use a spread to convert this iterable into an array.';
+            }
+            throw new Error(msg);
+        }
     }
     function validate_slots(name, slot, keys) {
         for (const slot_key of Object.keys(slot)) {
@@ -656,13 +697,354 @@ var app = (function () {
                 flagPath: "./assets/images/flags/europe/vatican.svg",
             },
         ],
+        northAmerica: [
+            {
+                name: "antigua and barbuda",
+                flagPath:
+                    "./assets/images/flags/north-america/antigua-and-barbuda.svg",
+            },
+            {
+                name: "bahamas",
+                flagPath: "./assets/images/flags/north-america/bahamas.svg",
+            },
+            {
+                name: "barbados",
+                flagPath: "./assets/images/flags/north-america/barbados.svg",
+            },
+            {
+                name: "belize",
+                flagPath: "./assets/images/flags/north-america/belize.svg",
+            },
+            {
+                name: "canada",
+                flagPath: "./assets/images/flags/north-america/canada.svg",
+            },
+            {
+                name: "costa rica",
+                flagPath: "./assets/images/flags/north-america/costa-rica.svg",
+            },
+            {
+                name: "cuba",
+                flagPath: "./assets/images/flags/north-america/cuba.svg",
+            },
+            {
+                name: "dominica",
+                flagPath: "./assets/images/flags/north-america/dominica.svg",
+            },
+            {
+                name: "dominican republic",
+                flagPath:
+                    "./assets/images/flags/north-america/dominican-republic.svg",
+            },
+            {
+                name: "el salvador",
+                flagPath: "./assets/images/flags/north-america/el-salvador.svg",
+            },
+            {
+                name: "greenland",
+                flagPath: "./assets/images/flags/north-america/greenland.svg",
+            },
+            {
+                name: "grenada",
+                flagPath: "./assets/images/flags/north-america/grenada.svg",
+            },
+            {
+                name: "guatemala",
+                flagPath: "./assets/images/flags/north-america/guatemala.svg",
+            },
+            {
+                name: "haiti",
+                flagPath: "./assets/images/flags/north-america/haiti.svg",
+            },
+            {
+                name: "honduras",
+                flagPath: "./assets/images/flags/north-america/honduras.svg",
+            },
+            {
+                name: "jamaica",
+                flagPath: "./assets/images/flags/north-america/jamaica.svg",
+            },
+            {
+                name: "mexico",
+                flagPath: "./assets/images/flags/north-america/mexico.svg",
+            },
+            {
+                name: "nicaragua",
+                flagPath: "./assets/images/flags/north-america/nicaragua.svg",
+            },
+            {
+                name: "panama",
+                flagPath: "./assets/images/flags/north-america/panama.svg",
+            },
+            {
+                name: "saint kitts and nevis",
+                flagPath:
+                    "./assets/images/flags/north-america/saint-kitts-and-nevis.svg",
+            },
+            {
+                name: "saint lucia",
+                flagPath: "./assets/images/flags/north-america/saint-lucia.svg",
+            },
+            {
+                name: "saint vincent and the grenadines",
+                flagPath:
+                    "./assets/images/flags/north-america/saint-vincent-and-the-grenadines.svg",
+            },
+            {
+                name: "trinidad and tobago",
+                flagPath:
+                    "./assets/images/flags/north-america/trinidad-and-tobago.svg",
+            },
+            {
+                name: "united states of america",
+                flagPath:
+                    "./assets/images/flags/north-america/united-states-of-america.svg",
+            },
+        ],
     });
+
+    const view = writable("menu");
+
+    /* src\components\Menu.svelte generated by Svelte v3.46.4 */
+
+    const { Object: Object_1$1, console: console_1 } = globals;
+    const file$2 = "src\\components\\Menu.svelte";
+
+    function get_each_context(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[6] = list[i];
+    	return child_ctx;
+    }
+
+    // (27:8) {#each list as item}
+    function create_each_block(ctx) {
+    	let button;
+    	let t_value = /*camelToPascal*/ ctx[1](/*item*/ ctx[6]) + "";
+    	let t;
+    	let mounted;
+    	let dispose;
+
+    	function click_handler() {
+    		return /*click_handler*/ ctx[3](/*item*/ ctx[6]);
+    	}
+
+    	const block = {
+    		c: function create() {
+    			button = element("button");
+    			t = text(t_value);
+    			attr_dev(button, "class", "menu__button button-main hover-default");
+    			add_location(button, file$2, 27, 8, 820);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, button, anchor);
+    			append_dev(button, t);
+
+    			if (!mounted) {
+    				dispose = listen_dev(button, "click", click_handler, false, false, false);
+    				mounted = true;
+    			}
+    		},
+    		p: function update(new_ctx, dirty) {
+    			ctx = new_ctx;
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(button);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_each_block.name,
+    		type: "each",
+    		source: "(27:8) {#each list as item}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment$2(ctx) {
+    	let div3;
+    	let div1;
+    	let div0;
+    	let img;
+    	let img_src_value;
+    	let t0;
+    	let h1;
+    	let t2;
+    	let div2;
+    	let each_value = /*list*/ ctx[0];
+    	validate_each_argument(each_value);
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
+    	}
+
+    	const block = {
+    		c: function create() {
+    			div3 = element("div");
+    			div1 = element("div");
+    			div0 = element("div");
+    			img = element("img");
+    			t0 = space();
+    			h1 = element("h1");
+    			h1.textContent = "Geo Quiz";
+    			t2 = space();
+    			div2 = element("div");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			if (!src_url_equal(img.src, img_src_value = "./assets/images/flags/north-america/nicaragua.svg")) attr_dev(img, "src", img_src_value);
+    			attr_dev(img, "alt", "nicaragua.svg");
+    			attr_dev(img, "class", "menu__background");
+    			add_location(img, file$2, 21, 12, 571);
+    			attr_dev(div0, "class", "menu__background-holder");
+    			add_location(div0, file$2, 20, 8, 520);
+    			attr_dev(div1, "class", "menu__background-wrap");
+    			add_location(div1, file$2, 19, 4, 475);
+    			attr_dev(h1, "class", "menu__heading");
+    			add_location(h1, file$2, 24, 4, 711);
+    			attr_dev(div2, "class", "menu__list");
+    			add_location(div2, file$2, 25, 4, 756);
+    			attr_dev(div3, "class", "menu");
+    			add_location(div3, file$2, 18, 0, 451);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div3, anchor);
+    			append_dev(div3, div1);
+    			append_dev(div1, div0);
+    			append_dev(div0, img);
+    			append_dev(div3, t0);
+    			append_dev(div3, h1);
+    			append_dev(div3, t2);
+    			append_dev(div3, div2);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(div2, null);
+    			}
+    		},
+    		p: function update(ctx, [dirty]) {
+    			if (dirty & /*openQuiz, list, camelToPascal*/ 7) {
+    				each_value = /*list*/ ctx[0];
+    				validate_each_argument(each_value);
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(div2, null);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value.length;
+    			}
+    		},
+    		i: noop,
+    		o: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div3);
+    			destroy_each(each_blocks, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$2.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$2($$self, $$props, $$invalidate) {
+    	let $flagLists;
+    	let $view;
+    	validate_store(flagLists, 'flagLists');
+    	component_subscribe($$self, flagLists, $$value => $$invalidate(4, $flagLists = $$value));
+    	validate_store(view, 'view');
+    	component_subscribe($$self, view, $$value => $$invalidate(5, $view = $$value));
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	validate_slots('Menu', slots, []);
+    	let list = Object.keys($flagLists);
+
+    	const camelToPascal = string => {
+    		const temp = string.replace(/([A-Z])/g, " $1");
+    		const finalResult = temp.charAt(0).toUpperCase() + temp.slice(1);
+    		return finalResult;
+    	};
+
+    	const openQuiz = quizName => {
+    		set_store_value(view, $view = quizName, $view);
+    	};
+
+    	console.log(Object.keys($flagLists).length);
+    	const writable_props = [];
+
+    	Object_1$1.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1.warn(`<Menu> was created with unknown prop '${key}'`);
+    	});
+
+    	const click_handler = item => openQuiz(item);
+
+    	$$self.$capture_state = () => ({
+    		flagLists,
+    		view,
+    		list,
+    		camelToPascal,
+    		openQuiz,
+    		$flagLists,
+    		$view
+    	});
+
+    	$$self.$inject_state = $$props => {
+    		if ('list' in $$props) $$invalidate(0, list = $$props.list);
+    	};
+
+    	if ($$props && "$$inject" in $$props) {
+    		$$self.$inject_state($$props.$$inject);
+    	}
+
+    	return [list, camelToPascal, openQuiz, click_handler];
+    }
+
+    class Menu extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$2, create_fragment$2, safe_not_equal, {});
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "Menu",
+    			options,
+    			id: create_fragment$2.name
+    		});
+    	}
+    }
 
     /* src\components\Quiz.svelte generated by Svelte v3.46.4 */
     const file$1 = "src\\components\\Quiz.svelte";
 
-    // (71:4) {#if incorrect}
-    function create_if_block(ctx) {
+    // (79:4) {#if incorrect}
+    function create_if_block$1(ctx) {
     	let span1;
     	let t0;
     	let span0;
@@ -676,9 +1058,9 @@ var app = (function () {
     			span0 = element("span");
     			t1 = text(t1_value);
     			attr_dev(span0, "class", "quiz__country-name");
-    			add_location(span0, file$1, 71, 52, 2382);
+    			add_location(span0, file$1, 79, 52, 2631);
     			attr_dev(span1, "class", "quiz__message");
-    			add_location(span1, file$1, 71, 4, 2334);
+    			add_location(span1, file$1, 79, 4, 2583);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span1, anchor);
@@ -696,9 +1078,9 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block.name,
+    		id: create_if_block$1.name,
     		type: "if",
-    		source: "(71:4) {#if incorrect}",
+    		source: "(79:4) {#if incorrect}",
     		ctx
     	});
 
@@ -733,15 +1115,14 @@ var app = (function () {
     	let t9;
     	let form;
     	let input;
-    	let input_class_value;
     	let t10;
-    	let button;
-    	let t11;
-    	let button_class_value;
+    	let button0;
     	let t12;
+    	let button1;
+    	let t14;
     	let mounted;
     	let dispose;
-    	let if_block = /*incorrect*/ ctx[4] && create_if_block(ctx);
+    	let if_block = /*incorrect*/ ctx[4] && create_if_block$1(ctx);
 
     	const block = {
     		c: function create() {
@@ -770,43 +1151,53 @@ var app = (function () {
     			form = element("form");
     			input = element("input");
     			t10 = space();
-    			button = element("button");
-    			t11 = text("Enter");
+    			button0 = element("button");
+    			button0.textContent = "Enter";
     			t12 = space();
+    			button1 = element("button");
+    			button1.textContent = "Back to menu";
+    			t14 = space();
     			if (if_block) if_block.c();
     			if (!src_url_equal(img0.src, img0_src_value = /*flagList*/ ctx[6][/*current*/ ctx[1]].flagPath)) attr_dev(img0, "src", img0_src_value);
     			attr_dev(img0, "alt", img0_alt_value = /*flagList*/ ctx[6][/*current*/ ctx[1]].name + ' - flag');
     			attr_dev(img0, "class", "quiz__background");
-    			add_location(img0, file$1, 52, 12, 1380);
+    			add_location(img0, file$1, 59, 12, 1555);
     			attr_dev(div0, "class", "quiz__background-holder");
-    			add_location(div0, file$1, 51, 8, 1329);
+    			add_location(div0, file$1, 58, 8, 1504);
     			attr_dev(div1, "class", "quiz__background-wrap");
-    			add_location(div1, file$1, 50, 4, 1284);
+    			add_location(div1, file$1, 57, 4, 1459);
     			if (!src_url_equal(img1.src, img1_src_value = /*flagList*/ ctx[6][/*current*/ ctx[1]].flagPath)) attr_dev(img1, "src", img1_src_value);
     			attr_dev(img1, "alt", img1_alt_value = /*flagList*/ ctx[6][/*current*/ ctx[1]].name + ' - flag');
     			attr_dev(img1, "class", "quiz__image");
-    			add_location(img1, file$1, 56, 8, 1562);
+    			add_location(img1, file$1, 63, 8, 1737);
     			attr_dev(div2, "class", "quiz__image-wrap");
-    			add_location(div2, file$1, 55, 4, 1522);
-    			add_location(span0, file$1, 60, 12, 1757);
+    			add_location(div2, file$1, 62, 4, 1697);
+    			add_location(span0, file$1, 67, 12, 1932);
     			attr_dev(span1, "class", "quiz__current");
-    			add_location(span1, file$1, 61, 12, 1794);
-    			add_location(span2, file$1, 62, 12, 1856);
+    			add_location(span1, file$1, 68, 12, 1969);
+    			add_location(span2, file$1, 69, 12, 2031);
     			attr_dev(div3, "class", "quiz__score");
-    			add_location(div3, file$1, 59, 8, 1718);
+    			add_location(div3, file$1, 66, 8, 1893);
     			attr_dev(span3, "class", "quiz__percentage");
-    			add_location(span3, file$1, 64, 8, 1902);
+    			add_location(span3, file$1, 71, 8, 2077);
     			attr_dev(div4, "class", "quiz__board");
-    			add_location(div4, file$1, 58, 4, 1683);
+    			add_location(div4, file$1, 65, 4, 1858);
+    			attr_dev(input, "spellcheck", "false");
     			attr_dev(input, "type", "text");
-    			attr_dev(input, "class", input_class_value = "quiz__input hover-default " + (/*correct*/ ctx[3] ? 'correct' : '') + " " + (/*incorrect*/ ctx[4] ? 'incorrect' : ''));
-    			add_location(input, file$1, 67, 8, 2041);
-    			attr_dev(button, "class", button_class_value = "button-main hover-default " + (/*correct*/ ctx[3] ? 'correct' : '') + " " + (/*incorrect*/ ctx[4] ? 'incorrect' : ''));
-    			add_location(button, file$1, 68, 8, 2181);
+    			attr_dev(input, "class", "quiz__input hover-default");
+    			toggle_class(input, "correct", /*correct*/ ctx[3]);
+    			toggle_class(input, "incorrect", /*incorrect*/ ctx[4]);
+    			add_location(input, file$1, 74, 8, 2216);
+    			attr_dev(button0, "class", "button-main hover-default");
+    			toggle_class(button0, "correct", /*correct*/ ctx[3]);
+    			toggle_class(button0, "incorrect", /*incorrect*/ ctx[4]);
+    			add_location(button0, file$1, 75, 8, 2348);
     			attr_dev(form, "class", "quiz__form");
-    			add_location(form, file$1, 66, 4, 1965);
+    			add_location(form, file$1, 73, 4, 2140);
+    			attr_dev(button1, "class", "quiz__back-button button-link hover-default");
+    			add_location(button1, file$1, 77, 4, 2453);
     			attr_dev(div5, "class", "quiz");
-    			add_location(div5, file$1, 49, 0, 1260);
+    			add_location(div5, file$1, 56, 0, 1435);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -836,15 +1227,17 @@ var app = (function () {
     			append_dev(form, input);
     			set_input_value(input, /*answer*/ ctx[0]);
     			append_dev(form, t10);
-    			append_dev(form, button);
-    			append_dev(button, t11);
+    			append_dev(form, button0);
     			append_dev(div5, t12);
+    			append_dev(div5, button1);
+    			append_dev(div5, t14);
     			if (if_block) if_block.m(div5, null);
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(input, "input", /*input_input_handler*/ ctx[9]),
-    					listen_dev(form, "submit", prevent_default(/*submitHandler*/ ctx[7]), false, true, false)
+    					listen_dev(input, "input", /*input_input_handler*/ ctx[10]),
+    					listen_dev(form, "submit", prevent_default(/*submitHandler*/ ctx[7]), false, true, false),
+    					listen_dev(button1, "click", /*backToMenu*/ ctx[8], false, false, false)
     				];
 
     				mounted = true;
@@ -870,23 +1263,31 @@ var app = (function () {
     			if (dirty & /*current*/ 2 && t4_value !== (t4_value = /*current*/ ctx[1] + 1 + "")) set_data_dev(t4, t4_value);
     			if (dirty & /*score*/ 4) set_data_dev(t8, /*score*/ ctx[2]);
 
-    			if (dirty & /*correct, incorrect*/ 24 && input_class_value !== (input_class_value = "quiz__input hover-default " + (/*correct*/ ctx[3] ? 'correct' : '') + " " + (/*incorrect*/ ctx[4] ? 'incorrect' : ''))) {
-    				attr_dev(input, "class", input_class_value);
-    			}
-
     			if (dirty & /*answer*/ 1 && input.value !== /*answer*/ ctx[0]) {
     				set_input_value(input, /*answer*/ ctx[0]);
     			}
 
-    			if (dirty & /*correct, incorrect*/ 24 && button_class_value !== (button_class_value = "button-main hover-default " + (/*correct*/ ctx[3] ? 'correct' : '') + " " + (/*incorrect*/ ctx[4] ? 'incorrect' : ''))) {
-    				attr_dev(button, "class", button_class_value);
+    			if (dirty & /*correct*/ 8) {
+    				toggle_class(input, "correct", /*correct*/ ctx[3]);
+    			}
+
+    			if (dirty & /*incorrect*/ 16) {
+    				toggle_class(input, "incorrect", /*incorrect*/ ctx[4]);
+    			}
+
+    			if (dirty & /*correct*/ 8) {
+    				toggle_class(button0, "correct", /*correct*/ ctx[3]);
+    			}
+
+    			if (dirty & /*incorrect*/ 16) {
+    				toggle_class(button0, "incorrect", /*incorrect*/ ctx[4]);
     			}
 
     			if (/*incorrect*/ ctx[4]) {
     				if (if_block) {
     					if_block.p(ctx, dirty);
     				} else {
-    					if_block = create_if_block(ctx);
+    					if_block = create_if_block$1(ctx);
     					if_block.c();
     					if_block.m(div5, null);
     				}
@@ -917,9 +1318,12 @@ var app = (function () {
     }
 
     function instance$1($$self, $$props, $$invalidate) {
+    	let $view;
     	let $flagLists;
+    	validate_store(view, 'view');
+    	component_subscribe($$self, view, $$value => $$invalidate(12, $view = $$value));
     	validate_store(flagLists, 'flagLists');
-    	component_subscribe($$self, flagLists, $$value => $$invalidate(11, $flagLists = $$value));
+    	component_subscribe($$self, flagLists, $$value => $$invalidate(13, $flagLists = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('Quiz', slots, []);
     	let { quizType } = $$props;
@@ -945,7 +1349,7 @@ var app = (function () {
     	const flagList = shuffleArray($flagLists[quizType]);
 
     	const answerChecker = () => {
-    		if (answer === flagList[current].name) {
+    		if (answer.toLowerCase() === flagList[current].name) {
     			$$invalidate(3, correct = true);
     			$$invalidate(4, incorrect = false);
     			correctAnswers++;
@@ -963,8 +1367,19 @@ var app = (function () {
     			$$invalidate(2, score = (correctAnswers / current * 100).toFixed(2));
     		} else {
     			answerChecker();
-    			window.alert(`Your score was ${score}`);
+
+    			setTimeout(
+    				() => {
+    					window.alert(`Your score was ${score}%`);
+    					set_store_value(view, $view = 'menu', $view);
+    				},
+    				500
+    			);
     		}
+    	};
+
+    	const backToMenu = () => {
+    		set_store_value(view, $view = 'menu', $view);
     	};
 
     	const writable_props = ['quizType'];
@@ -979,11 +1394,12 @@ var app = (function () {
     	}
 
     	$$self.$$set = $$props => {
-    		if ('quizType' in $$props) $$invalidate(8, quizType = $$props.quizType);
+    		if ('quizType' in $$props) $$invalidate(9, quizType = $$props.quizType);
     	};
 
     	$$self.$capture_state = () => ({
     		flagLists,
+    		view,
     		quizType,
     		answer,
     		current,
@@ -996,11 +1412,13 @@ var app = (function () {
     		flagList,
     		answerChecker,
     		submitHandler,
+    		backToMenu,
+    		$view,
     		$flagLists
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ('quizType' in $$props) $$invalidate(8, quizType = $$props.quizType);
+    		if ('quizType' in $$props) $$invalidate(9, quizType = $$props.quizType);
     		if ('answer' in $$props) $$invalidate(0, answer = $$props.answer);
     		if ('current' in $$props) $$invalidate(1, current = $$props.current);
     		if ('correctAnswers' in $$props) correctAnswers = $$props.correctAnswers;
@@ -1022,6 +1440,7 @@ var app = (function () {
     		total,
     		flagList,
     		submitHandler,
+    		backToMenu,
     		quizType,
     		input_input_handler
     	];
@@ -1030,7 +1449,7 @@ var app = (function () {
     class Quiz extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$1, create_fragment$1, safe_not_equal, { quizType: 8 });
+    		init(this, options, instance$1, create_fragment$1, safe_not_equal, { quizType: 9 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -1042,7 +1461,7 @@ var app = (function () {
     		const { ctx } = this.$$;
     		const props = options.props || {};
 
-    		if (/*quizType*/ ctx[8] === undefined && !('quizType' in props)) {
+    		if (/*quizType*/ ctx[9] === undefined && !('quizType' in props)) {
     			console.warn("<Quiz> was created without expected prop 'quizType'");
     		}
     	}
@@ -1057,15 +1476,51 @@ var app = (function () {
     }
 
     /* src\App.svelte generated by Svelte v3.46.4 */
+
+    const { Object: Object_1 } = globals;
     const file = "src\\App.svelte";
 
-    function create_fragment(ctx) {
-    	let link0;
-    	let link1;
-    	let link2;
-    	let t;
-    	let div1;
-    	let div0;
+    // (18:8) {#if $view === 'menu'}
+    function create_if_block_2(ctx) {
+    	let menu;
+    	let current;
+    	menu = new Menu({ $$inline: true });
+
+    	const block = {
+    		c: function create() {
+    			create_component(menu.$$.fragment);
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(menu, target, anchor);
+    			current = true;
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(menu.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(menu.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			destroy_component(menu, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_2.name,
+    		type: "if",
+    		source: "(18:8) {#if $view === 'menu'}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (21:8) {#if $view === "europe"}
+    function create_if_block_1(ctx) {
     	let quiz;
     	let current;
 
@@ -1076,43 +1531,12 @@ var app = (function () {
 
     	const block = {
     		c: function create() {
-    			link0 = element("link");
-    			link1 = element("link");
-    			link2 = element("link");
-    			t = space();
-    			div1 = element("div");
-    			div0 = element("div");
     			create_component(quiz.$$.fragment);
-    			attr_dev(link0, "rel", "preconnect");
-    			attr_dev(link0, "href", "https://fonts.googleapis.com");
-    			add_location(link0, file, 6, 4, 133);
-    			attr_dev(link1, "rel", "preconnect");
-    			attr_dev(link1, "href", "https://fonts.gstatic.com");
-    			attr_dev(link1, "crossorigin", "");
-    			add_location(link1, file, 7, 4, 198);
-    			attr_dev(link2, "href", "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap");
-    			attr_dev(link2, "rel", "stylesheet");
-    			add_location(link2, file, 8, 4, 272);
-    			document.title = "Geo Quiz";
-    			attr_dev(div0, "class", "app__wrap");
-    			add_location(div0, file, 13, 4, 455);
-    			attr_dev(div1, "class", "app");
-    			add_location(div1, file, 12, 0, 432);
-    		},
-    		l: function claim(nodes) {
-    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			append_dev(document.head, link0);
-    			append_dev(document.head, link1);
-    			append_dev(document.head, link2);
-    			insert_dev(target, t, anchor);
-    			insert_dev(target, div1, anchor);
-    			append_dev(div1, div0);
-    			mount_component(quiz, div0, null);
+    			mount_component(quiz, target, anchor);
     			current = true;
     		},
-    		p: noop,
     		i: function intro(local) {
     			if (current) return;
     			transition_in(quiz.$$.fragment, local);
@@ -1123,12 +1547,210 @@ var app = (function () {
     			current = false;
     		},
     		d: function destroy(detaching) {
+    			destroy_component(quiz, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_1.name,
+    		type: "if",
+    		source: "(21:8) {#if $view === \\\"europe\\\"}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (24:8) {#if $view === "northAmerica"}
+    function create_if_block(ctx) {
+    	let quiz;
+    	let current;
+
+    	quiz = new Quiz({
+    			props: { quizType: "northAmerica" },
+    			$$inline: true
+    		});
+
+    	const block = {
+    		c: function create() {
+    			create_component(quiz.$$.fragment);
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(quiz, target, anchor);
+    			current = true;
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(quiz.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(quiz.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			destroy_component(quiz, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block.name,
+    		type: "if",
+    		source: "(24:8) {#if $view === \\\"northAmerica\\\"}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment(ctx) {
+    	let link0;
+    	let link1;
+    	let link2;
+    	let t0;
+    	let div1;
+    	let div0;
+    	let t1;
+    	let t2;
+    	let current;
+    	let if_block0 = /*$view*/ ctx[0] === 'menu' && create_if_block_2(ctx);
+    	let if_block1 = /*$view*/ ctx[0] === "europe" && create_if_block_1(ctx);
+    	let if_block2 = /*$view*/ ctx[0] === "northAmerica" && create_if_block(ctx);
+
+    	const block = {
+    		c: function create() {
+    			link0 = element("link");
+    			link1 = element("link");
+    			link2 = element("link");
+    			t0 = space();
+    			div1 = element("div");
+    			div0 = element("div");
+    			if (if_block0) if_block0.c();
+    			t1 = space();
+    			if (if_block1) if_block1.c();
+    			t2 = space();
+    			if (if_block2) if_block2.c();
+    			attr_dev(link0, "rel", "preconnect");
+    			attr_dev(link0, "href", "https://fonts.googleapis.com");
+    			add_location(link0, file, 9, 4, 232);
+    			attr_dev(link1, "rel", "preconnect");
+    			attr_dev(link1, "href", "https://fonts.gstatic.com");
+    			attr_dev(link1, "crossorigin", "");
+    			add_location(link1, file, 10, 4, 297);
+    			attr_dev(link2, "href", "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap");
+    			attr_dev(link2, "rel", "stylesheet");
+    			add_location(link2, file, 11, 4, 371);
+    			document.title = "Geo Quiz";
+    			attr_dev(div0, "class", "app__wrap");
+    			add_location(div0, file, 16, 4, 554);
+    			attr_dev(div1, "class", "app");
+    			add_location(div1, file, 15, 0, 531);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			append_dev(document.head, link0);
+    			append_dev(document.head, link1);
+    			append_dev(document.head, link2);
+    			insert_dev(target, t0, anchor);
+    			insert_dev(target, div1, anchor);
+    			append_dev(div1, div0);
+    			if (if_block0) if_block0.m(div0, null);
+    			append_dev(div0, t1);
+    			if (if_block1) if_block1.m(div0, null);
+    			append_dev(div0, t2);
+    			if (if_block2) if_block2.m(div0, null);
+    			current = true;
+    		},
+    		p: function update(ctx, [dirty]) {
+    			if (/*$view*/ ctx[0] === 'menu') {
+    				if (if_block0) {
+    					if (dirty & /*$view*/ 1) {
+    						transition_in(if_block0, 1);
+    					}
+    				} else {
+    					if_block0 = create_if_block_2(ctx);
+    					if_block0.c();
+    					transition_in(if_block0, 1);
+    					if_block0.m(div0, t1);
+    				}
+    			} else if (if_block0) {
+    				group_outros();
+
+    				transition_out(if_block0, 1, 1, () => {
+    					if_block0 = null;
+    				});
+
+    				check_outros();
+    			}
+
+    			if (/*$view*/ ctx[0] === "europe") {
+    				if (if_block1) {
+    					if (dirty & /*$view*/ 1) {
+    						transition_in(if_block1, 1);
+    					}
+    				} else {
+    					if_block1 = create_if_block_1(ctx);
+    					if_block1.c();
+    					transition_in(if_block1, 1);
+    					if_block1.m(div0, t2);
+    				}
+    			} else if (if_block1) {
+    				group_outros();
+
+    				transition_out(if_block1, 1, 1, () => {
+    					if_block1 = null;
+    				});
+
+    				check_outros();
+    			}
+
+    			if (/*$view*/ ctx[0] === "northAmerica") {
+    				if (if_block2) {
+    					if (dirty & /*$view*/ 1) {
+    						transition_in(if_block2, 1);
+    					}
+    				} else {
+    					if_block2 = create_if_block(ctx);
+    					if_block2.c();
+    					transition_in(if_block2, 1);
+    					if_block2.m(div0, null);
+    				}
+    			} else if (if_block2) {
+    				group_outros();
+
+    				transition_out(if_block2, 1, 1, () => {
+    					if_block2 = null;
+    				});
+
+    				check_outros();
+    			}
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(if_block0);
+    			transition_in(if_block1);
+    			transition_in(if_block2);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(if_block0);
+    			transition_out(if_block1);
+    			transition_out(if_block2);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
     			detach_dev(link0);
     			detach_dev(link1);
     			detach_dev(link2);
-    			if (detaching) detach_dev(t);
+    			if (detaching) detach_dev(t0);
     			if (detaching) detach_dev(div1);
-    			destroy_component(quiz);
+    			if (if_block0) if_block0.d();
+    			if (if_block1) if_block1.d();
+    			if (if_block2) if_block2.d();
     		}
     	};
 
@@ -1144,16 +1766,40 @@ var app = (function () {
     }
 
     function instance($$self, $$props, $$invalidate) {
+    	let $flagLists;
+    	let $view;
+    	validate_store(flagLists, 'flagLists');
+    	component_subscribe($$self, flagLists, $$value => $$invalidate(1, $flagLists = $$value));
+    	validate_store(view, 'view');
+    	component_subscribe($$self, view, $$value => $$invalidate(0, $view = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('App', slots, []);
+    	let list = Object.keys($flagLists);
     	const writable_props = [];
 
-    	Object.keys($$props).forEach(key => {
+    	Object_1.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<App> was created with unknown prop '${key}'`);
     	});
 
-    	$$self.$capture_state = () => ({ flagLists, Quiz });
-    	return [];
+    	$$self.$capture_state = () => ({
+    		flagLists,
+    		view,
+    		Menu,
+    		Quiz,
+    		list,
+    		$flagLists,
+    		$view
+    	});
+
+    	$$self.$inject_state = $$props => {
+    		if ('list' in $$props) list = $$props.list;
+    	};
+
+    	if ($$props && "$$inject" in $$props) {
+    		$$self.$inject_state($$props.$$inject);
+    	}
+
+    	return [$view];
     }
 
     class App extends SvelteComponentDev {

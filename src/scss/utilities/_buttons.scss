@@ -12,10 +12,15 @@ button {
     font-size: 20px;
 }
 
-.hover-default{
+.button-link {
+    color: $grey-thin;
+    text-decoration: underline;
+}
+
+.hover-default {
     transition: $transition-fast;
     transition-property: opacity;
-    @include hover{
+    @include hover {
         opacity: 0.8;
     }
 }

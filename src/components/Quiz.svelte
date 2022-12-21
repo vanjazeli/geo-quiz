@@ -1,5 +1,5 @@
 <script>
-    import {flagLists} from "../stores";
+    import {flagLists, view} from "../stores";
     export let quizType;
 
     let answer = '';
@@ -24,7 +24,7 @@
     const flagList = shuffleArray($flagLists[quizType]);
 
     const answerChecker = () => {
-        if(answer === flagList[current].name){
+        if(answer.toLowerCase() === flagList[current].name) {
             correct = true;
             incorrect = false;
             correctAnswers ++;
@@ -42,8 +42,15 @@
             score = ((correctAnswers / current) * 100).toFixed(2);
         } else {
             answerChecker();
-            window.alert(`Your score was ${score}`);
+            setTimeout(()=>{
+                window.alert(`Your score was ${score}%`);
+                $view = 'menu';
+            },500)
         }
+    }
+
+    const backToMenu = () => {
+        $view = 'menu';
     }
 </script>
 
@@ -65,9 +72,10 @@
         <span class="quiz__percentage">{score}</span>
     </div>
     <form class="quiz__form" on:submit|preventDefault={submitHandler}>
-        <input type="text" class="quiz__input hover-default {correct ? 'correct': ''} {incorrect ? 'incorrect' : ''}" bind:value={answer}>
-        <button class="button-main hover-default {correct ? 'correct': ''} {incorrect ? 'incorrect' : ''}">Enter</button>
+        <input spellcheck="false" type="text" class="quiz__input hover-default" class:correct class:incorrect bind:value={answer}>
+        <button class="button-main hover-default" class:correct class:incorrect>Enter</button>
     </form>
+    <button class="quiz__back-button button-link hover-default" on:click={backToMenu}>Back to menu</button>
     {#if incorrect}
     <span class="quiz__message">Previous answer was <span class="quiz__country-name">{flagList[current - 1].name}</span></span>
     {/if}
