@@ -24,5 +24,17 @@
         {#if $view === "northAmerica"}
         <Quiz quizType="northAmerica"/>
         {/if}
+        {#if $view === "southAmerica"}
+        <Quiz quizType="southAmerica"/>
+        {/if}
+        {#if $view === "africa"}
+        <Quiz quizType="africa"/>
+        {/if}
+        {#if $view === "asia"}
+        <Quiz quizType="asia"/>
+        {/if}
+        {#if $view === "oceania"}
+        <Quiz quizType="oceania"/>
+        {/if}
     </div>
 </div>

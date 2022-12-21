@@ -307,6 +307,68 @@ export const flagLists = writable({
                 "./assets/images/flags/north-america/united-states-of-america.svg",
         },
     ],
+    southAmerica: [
+        {
+            name: "argentina",
+            flagPath:
+                "./assets/images/flags/south-america/argentina.svg",
+        },
+        {
+            name: "bolivia",
+            flagPath:
+                "./assets/images/flags/south-america/bolivia.svg",
+        },
+        {
+            name: "brazil",
+            flagPath:
+                "./assets/images/flags/south-america/brazil.svg",
+        },
+        {
+            name: "chile",
+            flagPath:
+                "./assets/images/flags/south-america/chile.svg",
+        },
+        {
+            name: "colombia",
+            flagPath:
+                "./assets/images/flags/south-america/colombia.svg",
+        },
+        {
+            name: "ecuador",
+            flagPath:
+                "./assets/images/flags/south-america/ecuador.svg",
+        },
+        {
+            name: "guyana",
+            flagPath:
+                "./assets/images/flags/south-america/guyana.svg",
+        },
+        {
+            name: "paraguay",
+            flagPath:
+                "./assets/images/flags/south-america/paraguay.svg",
+        },
+        {
+            name: "peru",
+            flagPath:
+                "./assets/images/flags/south-america/peru.svg",
+        },
+        {
+            name: "suriname",
+            flagPath:
+                "./assets/images/flags/south-america/suriname.svg",
+        },
+        {
+            name: "uruguay",
+            flagPath:
+                "./assets/images/flags/south-america/uruguay.svg",
+        },
+        {
+            name: "venezuela",
+            flagPath:
+                "./assets/images/flags/south-america/venezuela.svg",
+        },
+    ]
 });
 
 export const view = writable("menu");

@@ -801,6 +801,68 @@ var app = (function () {
                     "./assets/images/flags/north-america/united-states-of-america.svg",
             },
         ],
+        southAmerica: [
+            {
+                name: "argentina",
+                flagPath:
+                    "./assets/images/flags/south-america/argentina.svg",
+            },
+            {
+                name: "bolivia",
+                flagPath:
+                    "./assets/images/flags/south-america/bolivia.svg",
+            },
+            {
+                name: "brazil",
+                flagPath:
+                    "./assets/images/flags/south-america/brazil.svg",
+            },
+            {
+                name: "chile",
+                flagPath:
+                    "./assets/images/flags/south-america/chile.svg",
+            },
+            {
+                name: "colombia",
+                flagPath:
+                    "./assets/images/flags/south-america/colombia.svg",
+            },
+            {
+                name: "ecuador",
+                flagPath:
+                    "./assets/images/flags/south-america/ecuador.svg",
+            },
+            {
+                name: "guyana",
+                flagPath:
+                    "./assets/images/flags/south-america/guyana.svg",
+            },
+            {
+                name: "paraguay",
+                flagPath:
+                    "./assets/images/flags/south-america/paraguay.svg",
+            },
+            {
+                name: "peru",
+                flagPath:
+                    "./assets/images/flags/south-america/peru.svg",
+            },
+            {
+                name: "suriname",
+                flagPath:
+                    "./assets/images/flags/south-america/suriname.svg",
+            },
+            {
+                name: "uruguay",
+                flagPath:
+                    "./assets/images/flags/south-america/uruguay.svg",
+            },
+            {
+                name: "venezuela",
+                flagPath:
+                    "./assets/images/flags/south-america/venezuela.svg",
+            },
+        ]
     });
 
     const view = writable("menu");
@@ -1481,7 +1543,7 @@ var app = (function () {
     const file = "src\\App.svelte";
 
     // (18:8) {#if $view === 'menu'}
-    function create_if_block_2(ctx) {
+    function create_if_block_6(ctx) {
     	let menu;
     	let current;
     	menu = new Menu({ $$inline: true });
@@ -1510,7 +1572,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_2.name,
+    		id: create_if_block_6.name,
     		type: "if",
     		source: "(18:8) {#if $view === 'menu'}",
     		ctx
@@ -1520,7 +1582,7 @@ var app = (function () {
     }
 
     // (21:8) {#if $view === "europe"}
-    function create_if_block_1(ctx) {
+    function create_if_block_5(ctx) {
     	let quiz;
     	let current;
 
@@ -1553,7 +1615,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_1.name,
+    		id: create_if_block_5.name,
     		type: "if",
     		source: "(21:8) {#if $view === \\\"europe\\\"}",
     		ctx
@@ -1563,7 +1625,7 @@ var app = (function () {
     }
 
     // (24:8) {#if $view === "northAmerica"}
-    function create_if_block(ctx) {
+    function create_if_block_4(ctx) {
     	let quiz;
     	let current;
 
@@ -1596,9 +1658,181 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block.name,
+    		id: create_if_block_4.name,
     		type: "if",
     		source: "(24:8) {#if $view === \\\"northAmerica\\\"}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (27:8) {#if $view === "southAmerica"}
+    function create_if_block_3(ctx) {
+    	let quiz;
+    	let current;
+
+    	quiz = new Quiz({
+    			props: { quizType: "southAmerica" },
+    			$$inline: true
+    		});
+
+    	const block = {
+    		c: function create() {
+    			create_component(quiz.$$.fragment);
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(quiz, target, anchor);
+    			current = true;
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(quiz.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(quiz.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			destroy_component(quiz, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_3.name,
+    		type: "if",
+    		source: "(27:8) {#if $view === \\\"southAmerica\\\"}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (30:8) {#if $view === "africa"}
+    function create_if_block_2(ctx) {
+    	let quiz;
+    	let current;
+
+    	quiz = new Quiz({
+    			props: { quizType: "africa" },
+    			$$inline: true
+    		});
+
+    	const block = {
+    		c: function create() {
+    			create_component(quiz.$$.fragment);
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(quiz, target, anchor);
+    			current = true;
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(quiz.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(quiz.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			destroy_component(quiz, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_2.name,
+    		type: "if",
+    		source: "(30:8) {#if $view === \\\"africa\\\"}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (33:8) {#if $view === "asia"}
+    function create_if_block_1(ctx) {
+    	let quiz;
+    	let current;
+
+    	quiz = new Quiz({
+    			props: { quizType: "asia" },
+    			$$inline: true
+    		});
+
+    	const block = {
+    		c: function create() {
+    			create_component(quiz.$$.fragment);
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(quiz, target, anchor);
+    			current = true;
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(quiz.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(quiz.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			destroy_component(quiz, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_1.name,
+    		type: "if",
+    		source: "(33:8) {#if $view === \\\"asia\\\"}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (36:8) {#if $view === "oceania"}
+    function create_if_block(ctx) {
+    	let quiz;
+    	let current;
+
+    	quiz = new Quiz({
+    			props: { quizType: "oceania" },
+    			$$inline: true
+    		});
+
+    	const block = {
+    		c: function create() {
+    			create_component(quiz.$$.fragment);
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(quiz, target, anchor);
+    			current = true;
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(quiz.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(quiz.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			destroy_component(quiz, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block.name,
+    		type: "if",
+    		source: "(36:8) {#if $view === \\\"oceania\\\"}",
     		ctx
     	});
 
@@ -1614,10 +1848,18 @@ var app = (function () {
     	let div0;
     	let t1;
     	let t2;
+    	let t3;
+    	let t4;
+    	let t5;
+    	let t6;
     	let current;
-    	let if_block0 = /*$view*/ ctx[0] === 'menu' && create_if_block_2(ctx);
-    	let if_block1 = /*$view*/ ctx[0] === "europe" && create_if_block_1(ctx);
-    	let if_block2 = /*$view*/ ctx[0] === "northAmerica" && create_if_block(ctx);
+    	let if_block0 = /*$view*/ ctx[0] === 'menu' && create_if_block_6(ctx);
+    	let if_block1 = /*$view*/ ctx[0] === "europe" && create_if_block_5(ctx);
+    	let if_block2 = /*$view*/ ctx[0] === "northAmerica" && create_if_block_4(ctx);
+    	let if_block3 = /*$view*/ ctx[0] === "southAmerica" && create_if_block_3(ctx);
+    	let if_block4 = /*$view*/ ctx[0] === "africa" && create_if_block_2(ctx);
+    	let if_block5 = /*$view*/ ctx[0] === "asia" && create_if_block_1(ctx);
+    	let if_block6 = /*$view*/ ctx[0] === "oceania" && create_if_block(ctx);
 
     	const block = {
     		c: function create() {
@@ -1632,6 +1874,14 @@ var app = (function () {
     			if (if_block1) if_block1.c();
     			t2 = space();
     			if (if_block2) if_block2.c();
+    			t3 = space();
+    			if (if_block3) if_block3.c();
+    			t4 = space();
+    			if (if_block4) if_block4.c();
+    			t5 = space();
+    			if (if_block5) if_block5.c();
+    			t6 = space();
+    			if (if_block6) if_block6.c();
     			attr_dev(link0, "rel", "preconnect");
     			attr_dev(link0, "href", "https://fonts.googleapis.com");
     			add_location(link0, file, 9, 4, 232);
@@ -1663,6 +1913,14 @@ var app = (function () {
     			if (if_block1) if_block1.m(div0, null);
     			append_dev(div0, t2);
     			if (if_block2) if_block2.m(div0, null);
+    			append_dev(div0, t3);
+    			if (if_block3) if_block3.m(div0, null);
+    			append_dev(div0, t4);
+    			if (if_block4) if_block4.m(div0, null);
+    			append_dev(div0, t5);
+    			if (if_block5) if_block5.m(div0, null);
+    			append_dev(div0, t6);
+    			if (if_block6) if_block6.m(div0, null);
     			current = true;
     		},
     		p: function update(ctx, [dirty]) {
@@ -1672,7 +1930,7 @@ var app = (function () {
     						transition_in(if_block0, 1);
     					}
     				} else {
-    					if_block0 = create_if_block_2(ctx);
+    					if_block0 = create_if_block_6(ctx);
     					if_block0.c();
     					transition_in(if_block0, 1);
     					if_block0.m(div0, t1);
@@ -1693,7 +1951,7 @@ var app = (function () {
     						transition_in(if_block1, 1);
     					}
     				} else {
-    					if_block1 = create_if_block_1(ctx);
+    					if_block1 = create_if_block_5(ctx);
     					if_block1.c();
     					transition_in(if_block1, 1);
     					if_block1.m(div0, t2);
@@ -1714,10 +1972,10 @@ var app = (function () {
     						transition_in(if_block2, 1);
     					}
     				} else {
-    					if_block2 = create_if_block(ctx);
+    					if_block2 = create_if_block_4(ctx);
     					if_block2.c();
     					transition_in(if_block2, 1);
-    					if_block2.m(div0, null);
+    					if_block2.m(div0, t3);
     				}
     			} else if (if_block2) {
     				group_outros();
@@ -1728,18 +1986,110 @@ var app = (function () {
 
     				check_outros();
     			}
+
+    			if (/*$view*/ ctx[0] === "southAmerica") {
+    				if (if_block3) {
+    					if (dirty & /*$view*/ 1) {
+    						transition_in(if_block3, 1);
+    					}
+    				} else {
+    					if_block3 = create_if_block_3(ctx);
+    					if_block3.c();
+    					transition_in(if_block3, 1);
+    					if_block3.m(div0, t4);
+    				}
+    			} else if (if_block3) {
+    				group_outros();
+
+    				transition_out(if_block3, 1, 1, () => {
+    					if_block3 = null;
+    				});
+
+    				check_outros();
+    			}
+
+    			if (/*$view*/ ctx[0] === "africa") {
+    				if (if_block4) {
+    					if (dirty & /*$view*/ 1) {
+    						transition_in(if_block4, 1);
+    					}
+    				} else {
+    					if_block4 = create_if_block_2(ctx);
+    					if_block4.c();
+    					transition_in(if_block4, 1);
+    					if_block4.m(div0, t5);
+    				}
+    			} else if (if_block4) {
+    				group_outros();
+
+    				transition_out(if_block4, 1, 1, () => {
+    					if_block4 = null;
+    				});
+
+    				check_outros();
+    			}
+
+    			if (/*$view*/ ctx[0] === "asia") {
+    				if (if_block5) {
+    					if (dirty & /*$view*/ 1) {
+    						transition_in(if_block5, 1);
+    					}
+    				} else {
+    					if_block5 = create_if_block_1(ctx);
+    					if_block5.c();
+    					transition_in(if_block5, 1);
+    					if_block5.m(div0, t6);
+    				}
+    			} else if (if_block5) {
+    				group_outros();
+
+    				transition_out(if_block5, 1, 1, () => {
+    					if_block5 = null;
+    				});
+
+    				check_outros();
+    			}
+
+    			if (/*$view*/ ctx[0] === "oceania") {
+    				if (if_block6) {
+    					if (dirty & /*$view*/ 1) {
+    						transition_in(if_block6, 1);
+    					}
+    				} else {
+    					if_block6 = create_if_block(ctx);
+    					if_block6.c();
+    					transition_in(if_block6, 1);
+    					if_block6.m(div0, null);
+    				}
+    			} else if (if_block6) {
+    				group_outros();
+
+    				transition_out(if_block6, 1, 1, () => {
+    					if_block6 = null;
+    				});
+
+    				check_outros();
+    			}
     		},
     		i: function intro(local) {
     			if (current) return;
     			transition_in(if_block0);
     			transition_in(if_block1);
     			transition_in(if_block2);
+    			transition_in(if_block3);
+    			transition_in(if_block4);
+    			transition_in(if_block5);
+    			transition_in(if_block6);
     			current = true;
     		},
     		o: function outro(local) {
     			transition_out(if_block0);
     			transition_out(if_block1);
     			transition_out(if_block2);
+    			transition_out(if_block3);
+    			transition_out(if_block4);
+    			transition_out(if_block5);
+    			transition_out(if_block6);
     			current = false;
     		},
     		d: function destroy(detaching) {
@@ -1751,6 +2101,10 @@ var app = (function () {
     			if (if_block0) if_block0.d();
     			if (if_block1) if_block1.d();
     			if (if_block2) if_block2.d();
+    			if (if_block3) if_block3.d();
+    			if (if_block4) if_block4.d();
+    			if (if_block5) if_block5.d();
+    			if (if_block6) if_block6.d();
     		}
     	};
 
