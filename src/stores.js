@@ -159,7 +159,7 @@ export const flagLists = writable({
             flagPath: "./assets/images/flags/europe/russia.svg",
         },
         {
-            name: "san-marino",
+            name: "san marino",
             flagPath: "./assets/images/flags/europe/san-marino.svg",
         },
         {
@@ -195,12 +195,12 @@ export const flagLists = writable({
             flagPath: "./assets/images/flags/europe/ukraine.svg",
         },
         {
-            name: "united-kingdom",
+            name: "united kingdom",
             flagPath: "./assets/images/flags/europe/united-kingdom.svg",
         },
         {
-            name: "vatican-city",
-            flagPath: "./assets/images/flags/europe/vatican-city.svg",
+            name: "vatican",
+            flagPath: "./assets/images/flags/europe/vatican.svg",
         },
     ],
 });

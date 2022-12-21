@@ -147,17 +147,21 @@ table {
     .wrap {
       padding: 0 20px; } }
 
-@-webkit-keyframes running-text {
+@-webkit-keyframes shake {
   0% {
-    transform: translateX(0); }
+    transform: rotate(10deg); }
+  50% {
+    transform: rotate(-5deg); }
   100% {
-    transform: translateX(-100%); } }
+    transform: rotate(0deg); } }
 
-@keyframes running-text {
+@keyframes shake {
   0% {
-    transform: translateX(0); }
+    transform: rotate(10deg); }
+  50% {
+    transform: rotate(-5deg); }
   100% {
-    transform: translateX(-100%); } }
+    transform: rotate(0deg); } }
 
 .zoom-image {
   transition: 300ms ease-in-out;
@@ -521,7 +525,8 @@ button {
   min-height: 300px; }
 
 .quiz__image {
-  width: 100%; }
+  width: 100%;
+  outline: 3px solid #fff; }
 
 .quiz__board {
   color: #fff;
@@ -551,12 +556,12 @@ button {
   border: none;
   background-color: #fff; }
 
-.quiz__input--correct {
-  outline: 2px solid #93bc39;
+.correct {
+  outline: 3px solid #93bc39;
   color: #93bc39; }
 
-.quiz__input--incorrect {
-  outline: 2px solid #ee3f54;
+.incorrect {
+  outline: 3px solid #ee3f54;
   color: #ee3f54; }
 
 .quiz__message {
@@ -564,7 +569,9 @@ button {
   display: block;
   text-align: center;
   line-height: 32px;
-  font-weight: 700; }
+  font-weight: 700;
+  -webkit-animation: shake 200ms ease-in-out;
+          animation: shake 200ms ease-in-out; }
 
 .quiz__country-name {
   text-transform: capitalize; }

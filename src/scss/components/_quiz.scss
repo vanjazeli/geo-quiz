@@ -51,6 +51,7 @@
 
 .quiz__image {
     width: 100%;
+    outline: 3px solid $white;
 }
 
 .quiz__board {
@@ -90,13 +91,13 @@
     background-color: $white;
 }
 
-.quiz__input--correct {
-    outline: 2px solid $green-correct;
+.correct {
+    outline: 3px solid $green-correct;
     color: $green-correct;
 }
 
-.quiz__input--incorrect {
-    outline: 2px solid $red-incorrect;
+.incorrect {
+    outline: 3px solid $red-incorrect;
     color: $red-incorrect;
 }
 
@@ -106,6 +107,7 @@
     text-align: center;
     line-height: 32px;
     font-weight: 700;
+    animation: shake $transition-fast;
 }
 
 .quiz__country-name {

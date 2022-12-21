@@ -1,7 +1,6 @@
 <script>
     import {flagLists} from "../stores";
     export let quizType;
-    const flagList = $flagLists[quizType];
 
     let answer = '';
     let current = 0;
@@ -12,20 +11,38 @@
     let correct = false;
     let incorrect = false;
 
-    const submitHandler = () => {
+    const shuffleArray = (array) => {
+        for(let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            const temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+        return array;
+    }
+
+    const flagList = shuffleArray($flagLists[quizType]);
+
+    const answerChecker = () => {
         if(answer === flagList[current].name){
             correct = true;
             incorrect = false;
             correctAnswers ++;
-            score = correctAnswers / current;
         } else {
             incorrect = true;
             correct = false;
         }
+    }
+
+    const submitHandler = () => {
         if(current < total - 1) {
+            answerChecker();
             current++;
+            answer = '';
+            score = ((correctAnswers / current) * 100).toFixed(2);
         } else {
-            console.log("Here should go somehting else!");
+            answerChecker();
+            window.alert(`Your score was ${score}`);
         }
     }
 </script>
@@ -41,15 +58,15 @@
     </div>
     <div class="quiz__board">
         <div class="quiz__score">
-            <span>Score: </span>
+            <span>Question: </span>
             <span class="quiz__current">{current + 1}</span>
             <span>{total}</span>
         </div>
         <span class="quiz__percentage">{score}</span>
     </div>
     <form class="quiz__form" on:submit|preventDefault={submitHandler}>
-        <input type="text" class="quiz__input hover-default {correct ? 'quiz__input--correct': ''} {incorrect ? 'quiz__input--incorrect' : ''}" bind:value={answer}>
-        <button class="button-main hover-default">Enter</button>
+        <input type="text" class="quiz__input hover-default {correct ? 'correct': ''} {incorrect ? 'incorrect' : ''}" bind:value={answer}>
+        <button class="button-main hover-default {correct ? 'correct': ''} {incorrect ? 'incorrect' : ''}">Enter</button>
     </form>
     {#if incorrect}
     <span class="quiz__message">Previous answer was <span class="quiz__country-name">{flagList[current - 1].name}</span></span>
