@@ -12,8 +12,6 @@
     const openQuiz = (quizName) => {
         $view = quizName;
     }
-
-    console.log(Object.keys($flagLists).length);
 </script>
 
 <div class="menu">
